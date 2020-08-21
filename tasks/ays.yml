@@ -1,0 +1,15 @@
+---
+- name: Ensure `ays` is running
+  docker_container:
+    name: ays
+    image: sturmb/sky-ays:latest
+    pull: "{{ upgrade_ays | default(false) | bool }}"
+    state: started
+    restart_policy: unless-stopped
+    working_dir: /var/www/html
+    published_ports:
+      - "8083:80"
+      - "4545:443"
+    networks:
+      - name: web
+    networks_cli_compatible: yes

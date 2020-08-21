@@ -1,0 +1,17 @@
+---
+- name: Manage ACS
+  hosts: skyubuntu
+  gather_facts: yes
+
+  vars_files:
+    - ../vars/main.yml
+
+  tasks:
+    - name: Bring common containers online
+      import_tasks: ../tasks/common.yml
+
+    - name: Bring containers common to `acs` and `ays` online
+      import_tasks: ../tasks/common_acsays.yml
+
+    - name: Ensure the American Cabin Supply site is running
+      import_tasks: ../tasks/acs.yml

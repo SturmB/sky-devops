@@ -1,0 +1,46 @@
+---
+- name: Ensure Aptitude is installed
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+  become: true
+
+- name: Ensure dependencies are installed
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - python3-pip
+    - virtualenv
+    - python3-setuptools
+  become: true
+
+- name: Ensure PIP is installed
+  include_role:
+    name: geerlingguy.pip
+    apply:
+      become: yes
+
+- name: Ensure Docker is installed
+  include_role:
+    name: geerlingguy.docker
+    apply:
+      become: yes
+
+- name: Ensure the `web` network is running
+  docker_network:
+    name: web
+    driver: bridge
+    state: present
+    appends: yes
+    connected:
+      - acs
+      - ays
+      - acsays-db
