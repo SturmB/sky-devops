@@ -5,6 +5,7 @@
     image: sturmb/sky-ays:latest
     pull: "{{ upgrade_ays | default(false) | bool }}"
     state: started
+    recreate: "{{ recreate_containers }}"
     restart_policy: unless-stopped
     working_dir: /var/www/html
     published_ports:
@@ -13,3 +14,6 @@
     networks:
       - name: web
     networks_cli_compatible: yes
+  tags:
+    - docker
+    - ays

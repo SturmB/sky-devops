@@ -1,6 +1,17 @@
 ---
+- name: Manage Docker
+  hosts: all:!local
+  gather_facts: yes
+
+  tasks:
+    - name: Ensure Docker is installed
+      include_role:
+        name: geerlingguy.docker
+        apply:
+          become: yes
+
 - name: Manage AYS
-  hosts: skyubuntu
+  hosts: all
   gather_facts: yes
 
   vars_files:

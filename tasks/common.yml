@@ -7,6 +7,12 @@
     force_apt_get: yes
   become: true
 
+- name: Ensure PIP is installed with Docker
+  include_role:
+    name: geerlingguy.pip
+    apply:
+      become: yes
+
 - name: Ensure dependencies are installed
   apt:
     name: "{{ item }}"
@@ -22,25 +28,15 @@
     - python3-setuptools
   become: true
 
-- name: Ensure PIP is installed
-  include_role:
-    name: geerlingguy.pip
-    apply:
-      become: yes
-
-- name: Ensure Docker is installed
-  include_role:
-    name: geerlingguy.docker
-    apply:
-      become: yes
-
 - name: Ensure the `web` network is running
   docker_network:
     name: web
     driver: bridge
     state: present
     appends: yes
-    connected:
-      - acs
-      - ays
-      - acsays-db
+    # connected:
+    #   - acs
+    #   - ays
+    #   - acsays-db
+  tags:
+    - docker

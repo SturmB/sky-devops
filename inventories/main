@@ -1,2 +1,5 @@
+[local]
+localhost     ansible_connection=local      ansible_user=sturm
+
 [staging]
-skyubuntu   ansible_host=192.168.1.71  ansible_user=sturm
+skyubuntu     ansible_host=192.168.1.71     ansible_user=sturm
