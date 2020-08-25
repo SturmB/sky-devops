@@ -12,7 +12,7 @@ upgrade_ays: no
 upgrade_schedule: no
 
 # Miscellaneous vars
-recreate_containers: yes
+recreate_containers: no
 
 # geerlingguy.pip
 pip_install_packages:

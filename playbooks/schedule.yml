@@ -10,7 +10,7 @@
         apply:
           become: yes
 
-- name: Manage all websites
+- name: Manage Sky Schedule
   hosts: all
   gather_facts: yes
 
@@ -21,14 +21,5 @@
     - name: Bring common containers online
       import_tasks: ../tasks/common.yml
 
-    - name: Bring containers common to `acs` and `ays` online
-      import_tasks: ../tasks/common_acsays.yml
-
     - name: Ensure the Sky Schedule app is running
       import_tasks: ../tasks/schedule.yml
-
-    - name: Ensure the American Cabin Supply site is running
-      import_tasks: ../tasks/acs.yml
-
-    - name: Ensure the American Yacht Supply site is running
-      import_tasks: ../tasks/ays.yml
