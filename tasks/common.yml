@@ -35,8 +35,45 @@
     state: present
     appends: yes
     # connected:
+    #   - balancer
     #   - acs
     #   - ays
     #   - acsays-db
   tags:
     - docker
+    - acs
+    - ays
+
+- name: Get HAProxy's config file in place
+  template:
+    src: ../templates/haproxy.cfg.j2
+    dest: ~/web/config/haproxy/haproxy.cfg
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+  tags:
+    - docker
+    - acs
+    - ays
+
+- name: Ensure `balancer` is running
+  docker_container:
+    name: balancer
+    image: haproxy
+    pull: "{{ upgrade_ays | default(false) | bool }}"
+    state: started
+    recreate: "{{ recreate_containers }}"
+    restart_policy: unless-stopped
+    published_ports:
+      - "80:80"
+      - "443:443"
+      - "1936:1936"
+    networks:
+      - name: web
+    networks_cli_compatible: yes
+    volumes:
+      - ~/web/config/haproxy:/usr/local/etc/haproxy:ro
+  tags:
+    - docker
+    - acs
+    - ays

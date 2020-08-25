@@ -1,0 +1,63 @@
+global
+  log stdout format raw  local0
+  log stdout format raw  local1 notice
+  stats timeout 30s
+  daemon
+
+defaults
+  log     global
+  mode    http
+  option  httplog
+  option  dontlognull
+  timeout connect 5000
+  timeout client  50000
+  timeout server  50000
+
+frontend http-in
+  bind *:80
+
+  # Define hosts
+  # acl host_schedule hdr(Host) -i {{ 'sky-schedule' if template_host == 'localhost' else 'local-sky-schedule' }}
+  acl host_acs hdr(Host) -i {{ 'acs' if template_host == 'localhost' else 'local-acs' }}
+  acl host_ays hdr(Host) -i {{ 'ays' if template_host == 'localhost' else 'local-ays' }}
+
+  ## figure out which one to use
+  # use_backend schedule if host_schedule
+  use_backend acs if host_acs
+  use_backend ays if host_ays
+
+  default_backend acs
+
+# backend schedule
+#   balance roundrobin
+#   option forwardfor
+#   http-request set-header X-Forwarded-Port %[dst_port]
+#   http-request add-header X-Forwarded-Proto https if { ssl_fc }
+#   option httpchk HEAD / HTTP/1.1
+#   http-check send hdr Host localhost
+#   server schedule-01 schedule:80 check
+
+backend acs
+  balance roundrobin
+  option forwardfor
+  http-request set-header X-Forwarded-Port %[dst_port]
+  http-request add-header X-Forwarded-Proto https if { ssl_fc }
+  option httpchk HEAD / HTTP/1.1
+  http-check send hdr Host localhost
+  server acs-01 acs:80 check
+
+backend ays
+  balance roundrobin
+  option forwardfor
+  http-request set-header X-Forwarded-Port %[dst_port]
+  http-request add-header X-Forwarded-Proto https if { ssl_fc }
+  option httpchk HEAD / HTTP/1.1
+  http-check send hdr Host localhost
+  server ays-01 ays:80 check
+
+listen stats
+  bind *:1936
+  stats enable
+  stats uri /
+  stats hide-version
+  stats auth admin:admin
