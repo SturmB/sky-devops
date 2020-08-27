@@ -16,4 +16,5 @@
     networks_cli_compatible: yes
   tags:
     - docker
+    - app
     - ays
