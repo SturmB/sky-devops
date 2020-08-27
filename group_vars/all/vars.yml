@@ -1,9 +1,9 @@
 ---
 # Database vars
-db_acsays_database: sky
-db_schedule_database: sky_schedule
-db_username: skyweb
-db_password: sky241
+db_acsays_database: "{{ vault_db_acsays_database }}"
+db_schedule_database: "{{ vault_db_schedule_database }}"
+db_username: "{{ vault_db_username }}"
+db_password: "{{ vault_db_password }}"
 
 # Upgrade vars
 upgrade_aa: no

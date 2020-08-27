@@ -1,2 +1,4 @@
 .vscode/
 roles/
+vault.yml
+.vault_pass

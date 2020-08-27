@@ -15,7 +15,7 @@
   gather_facts: yes
 
   vars_files:
-    - ../vars/main.yml
+    - ../group_vars/all/vars.yml
 
   tasks:
     - name: Bring common containers online
