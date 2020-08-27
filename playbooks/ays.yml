@@ -29,6 +29,7 @@
         recreate: never
       tags:
         - docker
+        - acs
         - ays
 
     - name: Ensure the American Yacht Supply site is running

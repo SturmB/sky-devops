@@ -21,5 +21,25 @@
     - name: Bring common containers online
       import_tasks: ../tasks/common.yml
 
+    - name: Ensure `schedule-dbdata` volume exists
+      docker_volume:
+        volume_name: schedule-dbdata
+        state: present
+        driver: local
+        recreate: never
+      tags:
+        - docker
+        - schedule
+
     - name: Ensure the Sky Schedule app is running
-      import_tasks: ../tasks/schedule.yml
+      docker_compose:
+        project_src: .
+        state: present
+        recreate: "{{ recreate_containers }}"
+        services:
+          - balancer
+          - schedule
+          - schedule-db
+      tags:
+        - docker
+        - schedule

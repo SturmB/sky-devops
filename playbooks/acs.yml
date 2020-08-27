@@ -30,6 +30,7 @@
       tags:
         - docker
         - acs
+        - ays
 
     - name: Ensure the American Cabin Supply site is running
       docker_compose:

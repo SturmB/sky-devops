@@ -21,14 +21,41 @@
     - name: Bring common containers online
       import_tasks: ../tasks/common.yml
 
-    - name: Bring containers common to `acs` and `ays` online
-      import_tasks: ../tasks/common_acsays.yml
+    - name: Ensure `schedule-dbdata` volume exists
+      docker_volume:
+        volume_name: schedule-dbdata
+        state: present
+        driver: local
+        recreate: never
+      tags:
+        - docker
+        - schedule
 
-    - name: Ensure the Sky Schedule app is running
-      import_tasks: ../tasks/schedule.yml
+    - name: Ensure `acsays-dbdata` volume exists
+      docker_volume:
+        volume_name: acsays-dbdata
+        state: present
+        driver: local
+        recreate: never
+      tags:
+        - docker
+        - acs
+        - ays
 
-    - name: Ensure the American Cabin Supply site is running
-      import_tasks: ../tasks/acs.yml
-
-    - name: Ensure the American Yacht Supply site is running
-      import_tasks: ../tasks/ays.yml
+    - name: Ensure all of the sites/apps are running
+      docker_compose:
+        project_src: .
+        state: present
+        recreate: "{{ recreate_containers }}"
+        services:
+          - balancer
+          - schedule
+          - schedule-db
+          - acs
+          - ays
+          - acsays-db
+      tags:
+        - docker
+        - schedule
+        - acs
+        - ays

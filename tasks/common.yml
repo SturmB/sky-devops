@@ -41,6 +41,7 @@
     #   - acsays-db
   tags:
     - docker
+    - schedule
     - acs
     - ays
 
@@ -53,5 +54,6 @@
     mode: "0644"
   tags:
     - docker
+    - schedule
     - acs
     - ays
