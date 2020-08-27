@@ -5,7 +5,7 @@
     state: latest
     update_cache: yes
     force_apt_get: yes
-  become: true
+  become: yes
 
 - name: Ensure PIP is installed with Docker
   include_role:
@@ -26,7 +26,7 @@
     - python3-pip
     - virtualenv
     - python3-setuptools
-  become: true
+  become: yes
 
 - name: Ensure the `web` network is running
   docker_network:
@@ -51,28 +51,6 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: "0644"
-  tags:
-    - docker
-    - acs
-    - ays
-
-- name: Ensure `balancer` is running
-  docker_container:
-    name: balancer
-    image: haproxy
-    pull: "{{ upgrade_ays | default(false) | bool }}"
-    state: started
-    recreate: "{{ recreate_containers }}"
-    restart_policy: unless-stopped
-    published_ports:
-      - "80:80"
-      - "443:443"
-      - "1936:1936"
-    networks:
-      - name: web
-    networks_cli_compatible: yes
-    volumes:
-      - ~/web/config/haproxy:/usr/local/etc/haproxy:ro
   tags:
     - docker
     - acs

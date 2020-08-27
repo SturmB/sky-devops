@@ -28,6 +28,13 @@ frontend http-in
 
   default_backend acs
 
+# resolvers mydns
+#   nameserver localdns1 127.0.0.1:53
+#   nameserver skydns1 192.168.1.50:53
+#   nameserver skydns2 192.168.1.51:53
+#   nameserver webdns1 8.8.8.8:53
+#   nameserver webdns2 8.8.4.4:53
+
 backend schedule
   balance roundrobin
   option forwardfor
@@ -35,7 +42,8 @@ backend schedule
   http-request add-header X-Forwarded-Proto https if { ssl_fc }
   option httpchk HEAD / HTTP/1.1
   http-check send hdr Host localhost
-  server schedule-01 schedule:80 check
+  # http-check disable-on-404
+  server schedule-01 schedule:80 check init-addr last,libc,none
 
 backend acs
   balance roundrobin
@@ -44,7 +52,8 @@ backend acs
   http-request add-header X-Forwarded-Proto https if { ssl_fc }
   option httpchk HEAD / HTTP/1.1
   http-check send hdr Host localhost
-  server acs-01 acs:80 check
+  # http-check disable-on-404
+  server acs-01 acs:80 check init-addr last,libc,none
 
 backend ays
   balance roundrobin
@@ -53,7 +62,8 @@ backend ays
   http-request add-header X-Forwarded-Proto https if { ssl_fc }
   option httpchk HEAD / HTTP/1.1
   http-check send hdr Host localhost
-  server ays-01 ays:80 check
+  # http-check disable-on-404
+  server ays-01 ays:80 check init-addr last,libc,none
 
 listen stats
   bind *:1936

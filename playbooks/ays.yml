@@ -21,8 +21,25 @@
     - name: Bring common containers online
       import_tasks: ../tasks/common.yml
 
-    - name: Bring containers common to `acs` and `ays` online
-      import_tasks: ../tasks/common_acsays.yml
+    - name: Ensure `acsays-dbdata` volume exists
+      docker_volume:
+        volume_name: acsays-dbdata
+        state: present
+        driver: local
+        recreate: never
+      tags:
+        - docker
+        - ays
 
     - name: Ensure the American Yacht Supply site is running
-      import_tasks: ../tasks/ays.yml
+      docker_compose:
+        project_src: .
+        state: present
+        recreate: "{{ recreate_containers }}"
+        services:
+          - balancer
+          - ays
+          - acsays-db
+      tags:
+        - docker
+        - ays

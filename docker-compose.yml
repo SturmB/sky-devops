@@ -15,10 +15,10 @@ services:
       - "80:80"
       - "443:443"
       - "1936:1936"
-#    depends_on:
- #     - schedule
-  #    - acs
-   #   - ays
+    # depends_on:
+    #   - schedule
+    #   - acs
+    #   - ays
 
   # Sky Schedule app (Apache & PHP services with Laravel)
   schedule:
@@ -30,8 +30,8 @@ services:
       - /mnt/jobs_main:/mnt/jobs_main
     #  - /mnt/jobs_archive_01:/mnt/jobs_archive_01
       - /mnt/orders:/mnt/orders
-    # depends_on:
-    #   - schedule-db
+    depends_on:
+      - schedule-db
     ports:
       - "8081:80"
       - "4543:443"

@@ -12,11 +12,13 @@ upgrade_ays: no
 upgrade_schedule: no
 
 # Miscellaneous vars
-recreate_containers: no
+# `recreate_containers` can be `always`, `never`, or `smart` (default).
+recreate_containers: always
 
 # geerlingguy.pip
 pip_install_packages:
   - name: docker
+  - name: docker-compose
 
 # geerlingguy.docker
 docker_users:
