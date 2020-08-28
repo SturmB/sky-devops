@@ -14,6 +14,8 @@ upgrade_schedule: no
 # Miscellaneous vars
 # `recreate_containers` can be `always`, `never`, or `smart` (default).
 recreate_containers: always
+work_dir: ~/web
+config_dir: "{{ work_dir }}/config"
 
 # geerlingguy.pip
 pip_install_packages:

@@ -28,7 +28,7 @@
     - python3-setuptools
   become: yes
 
-- name: Ensure the `web` network is running
+- name: Ensure the `web` network exists
   docker_network:
     name: web
     driver: bridge
@@ -45,10 +45,49 @@
     - acs
     - ays
 
-- name: Get HAProxy's config file in place
+- name: Ensure the HAProxy's config file is in place
   template:
     src: ../templates/haproxy.cfg.j2
-    dest: ~/web/config/haproxy/haproxy.cfg
+    dest: "{{ config_dir }}/haproxy/haproxy.cfg"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+  tags:
+    - docker
+    - schedule
+    - acs
+    - ays
+
+- name: Ensure the MySQL config file is in place
+  copy:
+    src: "{{ config_dir }}/mysql/my.cnf"
+    dest: "{{ config_dir }}/mysql/my.cnf"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+  tags:
+    - docker
+    - schedule
+    - acs
+    - ays
+
+- name: Ensure the Environment Variables file is in place
+  template:
+    src: ../templates/.env.j2
+    dest: "{{ work_dir }}/.env"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+  tags:
+    - docker
+    - schedule
+    - acs
+    - ays
+
+- name: Ensure the `docker-compose.yml` file is in place
+  template:
+    src: ../templates/docker-compose.yml.j2
+    dest: "{{ work_dir }}/docker-compose.yml"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: "0644"
