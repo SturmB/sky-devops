@@ -17,9 +17,9 @@ frontend http-in
   bind *:80
 
   # Define hosts
-  acl host_schedule hdr(Host) -i {{ 'sky-schedule' if template_host == 'localhost' else 'local-sky-schedule' }}
-  acl host_acs hdr(Host) -i {{ 'acs' if template_host == 'localhost' else 'local-acs' }}
-  acl host_ays hdr(Host) -i {{ 'ays' if template_host == 'localhost' else 'local-ays' }}
+  acl host_schedule hdr(Host) -i {{ 'local-sky-schedule' if inventory_hostname == 'localhost' else 'sky-schedule' }}
+  acl host_acs hdr(Host) -i {{ 'local-acs' if inventory_hostname == 'localhost' else 'acs' }}
+  acl host_ays hdr(Host) -i {{ 'local-ays' if inventory_hostname == 'localhost' else 'ays' }}
 
   ## figure out which one to use
   use_backend schedule if host_schedule
