@@ -1,0 +1,54 @@
+---
+- name: Provision the droplets
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: Ensure `abl-03` droplet exists
+      digital_ocean_droplet:
+        oauth_token: "{{ lookup('env', 'DO_API_TOKEN') }}"
+        state: present
+        name: abl-03
+        private_networking: yes
+        size: s-1vcpu-1gb
+        image: lamp-20-04
+        region: nyc3
+        ipv6: yes
+        ssh_keys: 28311563
+        unique_name: yes
+        wait: yes
+        tags:
+          - abl
+      register: droplet
+      tags:
+        - droplet
+        - abl
+
+    - name: Add new host to our inventory
+      add_host:
+        name: "{{ droplet.data.droplet.name }}"
+        ansible_host: "{{ droplet.data.ip_address }}"
+        groups:
+          - do
+          - do_abl
+      when: droplet.data is defined
+      changed_when: false
+      tags:
+        - droplet
+        - abl
+
+- name: Create the users on the droplets
+  hosts: do
+  remote_user: root
+
+  vars_files:
+    - ../inventories/group_vars/all/vars.yml
+
+  tasks:
+    - name: Ensure user is created
+      include_role:
+        name: weareinteractive.users
+      tags:
+        - droplet
+        - abl

@@ -25,3 +25,18 @@ pip_install_packages:
 # geerlingguy.docker
 docker_users:
   - "{{ ansible_user }}"
+
+# weareinteractive.users:
+users:
+  - username: "sturm"
+    name: Chris McGee
+    uid: 1000
+    password: "{{ vault_user_password | password_hash('sha512') }}"
+    authorized_keys:
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    home_create: yes
+    home_mode: "0750"
+    groups:
+      - admin
+    append: yes
+    shell: /bin/bash
