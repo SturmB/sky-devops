@@ -2,3 +2,4 @@
 - src: geerlingguy.pip
 - src: geerlingguy.docker
 - src: weareinteractive.users
+- src: geerlingguy.apache

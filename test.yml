@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: with_sequence -> loop
+      debug:
+        msg: "{{ 'testuser%02x' | format(item) }}"
+      # range is exclusive of the end point
+      loop: "{{ range(0, 4 + 1, 2)|list }}"
