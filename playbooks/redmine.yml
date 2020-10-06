@@ -244,6 +244,28 @@
         - droplet
         - redmine
 
+    - name: Ensure Redmine's email settings are configured
+      template:
+        src: ../templates/configuration.yml.j2
+        dest: /etc/redmine/default/configuration.yml
+        owner: root
+        group: www-data
+        mode: 0644
+      notify: Restart Apache
+      tags:
+        - droplet
+        - redmine
+    
+    - name: Ensure Redmine's restart file is touched
+      copy:
+        dest: /usr/share/redmine/tmp/restart.txt
+        content: |
+          restart
+      notify: Restart Apache
+      tags:
+        - droplet
+        - redmine
+
   handlers:
     - name: Restart Apache
       service:

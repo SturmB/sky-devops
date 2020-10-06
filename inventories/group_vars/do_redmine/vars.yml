@@ -9,6 +9,13 @@ site_name: dev.skyunlimitedinc.com
 # Database vars
 redmine_password: "{{ vault_redmine_password }}"
 
+# Email vars
+gmx_host: mail.gmx.com
+gmx_port: 25
+gmx_domain: gmx.com
+gmx_username: "{{ vault_gmx_username }}"
+gmx_password: "{{ vault_gmx_password }}"
+
 # geerlingguy.apache
 # apache_global_vhost_settings: |
 #   DirectoryIndex default.htm index.php index.html
