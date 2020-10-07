@@ -10,6 +10,7 @@
         oauth_token: "{{ lookup('env', 'DO_API_TOKEN') }}"
         state: present
         name: "{{ item.shortname }}-01"
+        backups: yes
         private_networking: yes
         size: s-1vcpu-1gb
         image: lamp-20-04
@@ -52,9 +53,13 @@
   pre_tasks:
     - name: Wait up to 600 seconds for target connection to become reachable/usable
       wait_for_connection:
+      tags:
+        - droplet
     
     - name: Gather Facts
       setup:
+      tags:
+        - droplet
 
   tasks:
     - name: Ensure user is created
@@ -71,12 +76,6 @@
         recurse: yes
       tags:
         - droplet
-
-    - debug:
-        var: group_names
-
-    - debug:
-        var: "'do_abl' in group_names"
 
     - name: Ensure `default.htm` is the first index file Apache looks for
       lineinfile:
@@ -122,9 +121,6 @@
       tags:
         - droplet
 
-    - debug:
-        var: d_index
-
     - name: Ensure apache is installed and configured
       include_role:
         name: geerlingguy.apache
@@ -142,10 +138,28 @@
       notify: Restart Apache
       tags:
         - droplet
+        - abl
         - never
+
+    - name: Enable IPv6 nameservers
+      replace:
+        path: /etc/netplan/50-cloud-init.yaml
+        regexp: (^\s+eth0[^#]*?)(((\d{1,3})(\.|$)){4})\n(\s+)(search[^#]*eth0)
+        replace: |2-
+          \1\2
+          \6- 2001:4860:4860::8844
+          \6- 2001:4860:4860::8888
+          \6\7
+        validate: netplan apply --debug %s
+      notify: Restart Droplet
+      tags:
+        - droplet
 
   handlers:
     - name: Restart Apache
       service:
         name: apache2
         state: restarted
+    
+    - name: Restart Droplet
+      reboot:
