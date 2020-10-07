@@ -73,6 +73,7 @@ apache_vhosts:
     documentroot: "/var/www/html"
     extra_parameters: |2
       {{ d_index }}
+        RewriteEngine On
         RewriteCond %{SERVER_NAME} =www.{{ domain }} [OR]
         RewriteCond %{SERVER_NAME} ={{ domain }}
         RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
