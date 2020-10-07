@@ -3,9 +3,11 @@
 ssl_key: "/etc/ssl/private/mail.skyunlimitedinc.com.key"
 ssl_cert_client: "/etc/ssl/certs/mail.skyunlimitedinc.com.crt"
 ssl_cert_ca: "/etc/ssl/certs/mail.skyunlimitedinc.com.chained.crt"
-abl_num: 3
-abl_name: autumnblazelodge.com
-abl_index: DirectoryIndex default.htm index.php index.html
+
+do_droplets:
+  - shortname: abl
+    domain: autumnblazelodge.com
+    d_index: DirectoryIndex default.htm index.php index.html
 
 # Database vars
 db_acsays_database: "{{ vault_db_acsays_database }}"
@@ -62,34 +64,24 @@ users:
     append: yes
     shell: /bin/bash
 
-#geerlingguy.certbot
-certbot_create_if_missing: true
-certbot_create_method: standalone
-certbot_admin_email: itdept@skyunlimitedinc.com
-certbot_create_standalone_stop_services: apache2
-certbot_certs:
-  - domains:
-      - "{{ abl_name }}"
-      - "www.{{ abl_name }}"
-
 # geerlingguy.apache
-# apache_global_vhost_settings: |
-#   DirectoryIndex default.htm index.php index.html
+apache_global_vhost_settings: |
+  DirectoryIndex default.htm index.php index.html
 apache_vhosts:
-  - servername: "{{ abl_name }}"
-    serveralias: "www.{{ abl_name }}"
+  - servername: "{{ domain }}"
+    serveralias: "www.{{ domain }}"
     documentroot: "/var/www/html"
-    extra_parameters: |
-      {{ abl_index }}
-      RewriteCond %{SERVER_NAME} =www.{{ abl_name }} [OR]
-      RewriteCond %{SERVER_NAME} ={{ abl_name }}
-      RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+    extra_parameters: |2
+      {{ d_index }}
+        RewriteCond %{SERVER_NAME} =www.{{ domain }} [OR]
+        RewriteCond %{SERVER_NAME} ={{ domain }}
+        RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 apache_vhosts_ssl:
-  - servername: "{{ abl_name }}"
-    serveralias: "www.{{ abl_name }}"
+  - servername: "{{ domain }}"
+    serveralias: "www.{{ domain }}"
     documentroot: "/var/www/html"
     certificate_file: "{{ ssl_cert_client }}"
     certificate_key_file: "{{ ssl_key }}"
     certificate_chain_file: "{{ ssl_cert_ca }}"
-    extra_parameters: |
-      {{ abl_index }}
+    extra_parameters: |2
+      {{ d_index }}

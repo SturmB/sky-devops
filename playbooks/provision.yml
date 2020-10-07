@@ -2,15 +2,14 @@
 - name: Provision the droplets
   hosts: localhost
   connection: local
-  gather_facts: False
+  gather_facts: false
 
   tasks:
-    - name: Ensure `abl` droplets exist
+    - name: Ensure droplets exist
       digital_ocean_droplet:
         oauth_token: "{{ lookup('env', 'DO_API_TOKEN') }}"
         state: present
-        # name: "{{ 'abl-%02i' | format(item) }}"
-        name: abl-03
+        name: "{{ item.shortname }}-01"
         private_networking: yes
         size: s-1vcpu-1gb
         image: lamp-20-04
@@ -21,42 +20,36 @@
         wait: yes
         wait_timeout: 300
         tags:
-          - abl
-      # loop: "{{ range(1, abl_num + 1) | list }}"
+          - "{{ item.shortname }}"
+      loop: "{{ do_droplets }}"
       register: droplet
       tags:
         - droplet
-        - abl
 
-    - name: Add new host to our inventory
+    - name: Add new hosts to inventory
       add_host:
-        # name: "{{ item.data.droplet.name }}"
-        # ansible_host: "{{ item.data.ip_address }}"
-        name: "{{ droplet.data.droplet.name }}"
-        ansible_host: "{{ droplet.data.ip_address }}"
+        name: "{{ item.data.droplet.name }}"
+        ansible_host: "{{ item.data.ip_address }}"
         groups:
           - do
-          - do_abl
-      # when: item.data is defined
-      when: droplet.data is defined
+          - "do_{{ item.item.shortname }}"
+        shortname: "{{ item.item.shortname }}"
+        domain: "{{ item.item.domain }}"
+        d_index: "{{ item.item.d_index | default('') }}"
+      when: item.data is defined
       changed_when: false
-      # loop: "{{ droplet.results }}"
+      loop: "{{ droplet.results }}"
+      loop_control:
+        label: "{{ item.data.droplet.name }}"
       tags:
         - droplet
-        - abl
 
 - name: Prepare the droplets
   hosts: do
   remote_user: root
   gather_facts: no
 
-  vars_files:
-    - ../inventories/group_vars/all/vars.yml
-
   pre_tasks:
-    - debug:
-        var: ansible_host
-
     - name: Wait up to 600 seconds for target connection to become reachable/usable
       wait_for_connection:
     
@@ -69,7 +62,6 @@
         name: weareinteractive.users
       tags:
         - droplet
-        - abl
 
     - name: Ensure the web root is writable for the `www-data` group
       file:
@@ -77,14 +69,23 @@
         state: directory
         mode: g+w
         recurse: yes
+      tags:
+        - droplet
+
+    - debug:
+        var: group_names
+
+    - debug:
+        var: "'do_abl' in group_names"
 
     - name: Ensure `default.htm` is the first index file Apache looks for
       lineinfile:
         path: /etc/apache2/sites-available/000-default.conf
         state: present
         backrefs: yes
-        regexp: '^(\s+DirectoryIndex)\s(?!default\.htm)\s(.*)'
+        regexp: '^(\s+DirectoryIndex)\s(index.php.*)'
         line: '\1 default.htm \2'
+      when: "'do_abl' in group_names"
       notify:
         - Restart Apache
       tags:
@@ -100,7 +101,6 @@
         mode: 0600
       tags:
         - droplet
-        - abl
 
     - name: Ensure client certificate exists
       copy:
@@ -111,7 +111,6 @@
         mode: 0644
       tags:
         - droplet
-        - abl
 
     - name: Ensure intermediate certificates exist
       copy:
@@ -122,14 +121,28 @@
         mode: 0644
       tags:
         - droplet
-        - abl
+
+    - debug:
+        var: d_index
 
     - name: Ensure apache is installed and configured
       include_role:
         name: geerlingguy.apache
       tags:
         - droplet
-        - abl
+
+    - name: Add additional lines to the vhosts config file
+      replace:
+        path: /etc/apache2/sites-available/vhosts.conf
+        regexp: (^\s+</Directory>)
+        replace: |2
+              {{ d_index }}
+          \1
+      when: "'do_abl' in group_names"
+      notify: Restart Apache
+      tags:
+        - droplet
+        - never
 
   handlers:
     - name: Restart Apache
