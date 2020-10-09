@@ -8,6 +8,11 @@ do_droplets:
   - shortname: abl
     domain: autumnblazelodge.com
     d_index: DirectoryIndex default.htm index.php index.html
+  - shortname: cupnapkin
+    domain: cupnapkin.com
+    d_index: ""
+  - shortname: sky
+    domain: skyunlimitedinc.com
 
 # Database vars
 db_acsays_database: "{{ vault_db_acsays_database }}"
