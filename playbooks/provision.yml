@@ -26,6 +26,7 @@
       register: droplet
       tags:
         - droplet
+        - laravel
 
     - name: Add new hosts to inventory
       add_host:
@@ -33,10 +34,12 @@
         ansible_host: "{{ item.data.ip_address }}"
         groups:
           - do
-          - "do_{{ item.item.shortname }}"
+          - do_{{ item.item.shortname }}
+          - "{{ item.item.framework | default('static_html') }}"
         shortname: "{{ item.item.shortname }}"
         domain: "{{ item.item.domain }}"
         d_index: "{{ item.item.d_index | default('') }}"
+        doc_root: "{{ item.item.doc_root | default('/var/www/html') }}"
       when: item.data is defined
       changed_when: false
       loop: "{{ droplet.results }}"
@@ -44,6 +47,7 @@
         label: "{{ item.data.droplet.name }}"
       tags:
         - droplet
+        - laravel
 
 - name: Prepare the droplets
   hosts: do
@@ -62,7 +66,7 @@
         - droplet
 
   tasks:
-    - name: Ensure user is created
+    - name: Ensure users are created
       include_role:
         name: weareinteractive.users
       tags:
@@ -163,3 +167,50 @@
     
     - name: Restart Droplet
       reboot:
+
+- name: Set up for a Laravel site/app
+  hosts: laravel
+  remote_user: root
+
+  roles:
+    - geerlingguy.composer
+
+  tasks:
+    - name: Ensure production-ready `.env` file exists
+      template:
+        src: ../templates/acsays.env.j2
+        dest: /var/www/html/.env
+        owner: www-data
+        group: www-data
+        mode: 0664
+      tags:
+        - droplet
+        - laravel
+        - ays
+
+    # - name: Ensure remote repository's `.git` directory exists
+    #   file:
+    #     path: /var/www/html/.git
+    #     state: directory
+    #     owner: www-data
+    #     group: www-data
+    #     mode: 0775
+    #   tags:
+    #     - droplet
+    #     - laravel
+    #     - ays
+
+    # - name: Ensure remote repository is established
+    #   # git:
+    #   #   repo: git@github.com:skyunlimitedinc/ays.git
+    #   #   dest: /var/www/html
+    #   #   clone: no
+    #   #   bare: yes
+    #   shell:
+    #     cmd: git init --bare
+    #     chdir: /var/www/html/.git
+    #     creates: /var/www/html/.git/HEAD
+    #   tags:
+    #     - droplet
+    #     - laravel
+    #     - ays

@@ -1,0 +1,10 @@
+---
+# Laravel variables
+app_name: American Yacht Supply
+app_url: https://americanyachtsupply.com
+
+db_host: "{{ vault_db_host }}"
+db_port: "{{ vault_db_port }}"
+db_name: "{{ vault_db_name }}"
+db_username: "{{ vault_db_username }}"
+db_password: "{{ vault_db_password }}"

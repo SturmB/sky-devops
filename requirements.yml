@@ -3,3 +3,4 @@
 - src: geerlingguy.docker
 - src: weareinteractive.users
 - src: geerlingguy.apache
+- src: geerlingguy.composer
