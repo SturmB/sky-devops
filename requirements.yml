@@ -4,3 +4,4 @@
 - src: weareinteractive.users
 - src: geerlingguy.apache
 - src: geerlingguy.composer
+- src: geerlingguy.nodejs

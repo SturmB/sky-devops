@@ -170,10 +170,12 @@
 
 - name: Set up for a Laravel site/app
   hosts: laravel
+  tags: laravel
   remote_user: root
 
   roles:
     - geerlingguy.composer
+    - geerlingguy.nodejs
 
   tasks:
     - name: Ensure `php-mbstring` is installed
@@ -188,7 +190,6 @@
       notify: Restart Apache
       tags:
         - droplet
-        - laravel
         - ays
 
     - name: Ensure production-ready `.env` file exists
@@ -200,7 +201,6 @@
         mode: 0664
       tags:
         - droplet
-        - laravel
         - ays
 
   handlers:
@@ -208,4 +208,3 @@
       service:
         name: apache2
         state: restarted
-    
