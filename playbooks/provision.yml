@@ -176,6 +176,16 @@
     - geerlingguy.composer
 
   tasks:
+    - name: Ensure `php-mbstring` is installed
+      apt:
+        name: php-mbstring
+        state: present
+        update_cache: yes
+      tags:
+        - droplet
+        - laravel
+        - ays
+
     - name: Ensure production-ready `.env` file exists
       template:
         src: ../templates/acsays.env.j2
