@@ -185,6 +185,7 @@
           - php-zip
         state: present
         update_cache: yes
+      notify: Restart Apache
       tags:
         - droplet
         - laravel
@@ -202,29 +203,9 @@
         - laravel
         - ays
 
-    # - name: Ensure remote repository's `.git` directory exists
-    #   file:
-    #     path: /var/www/html/.git
-    #     state: directory
-    #     owner: www-data
-    #     group: www-data
-    #     mode: 0775
-    #   tags:
-    #     - droplet
-    #     - laravel
-    #     - ays
-
-    # - name: Ensure remote repository is established
-    #   # git:
-    #   #   repo: git@github.com:skyunlimitedinc/ays.git
-    #   #   dest: /var/www/html
-    #   #   clone: no
-    #   #   bare: yes
-    #   shell:
-    #     cmd: git init --bare
-    #     chdir: /var/www/html/.git
-    #     creates: /var/www/html/.git/HEAD
-    #   tags:
-    #     - droplet
-    #     - laravel
-    #     - ays
+  handlers:
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+    
