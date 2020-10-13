@@ -178,7 +178,11 @@
   tasks:
     - name: Ensure `php-mbstring` is installed
       apt:
-        name: php-mbstring
+        name:
+          - php-mbstring
+          - zip
+          - unzip
+          - php-zip
         state: present
         update_cache: yes
       tags:
