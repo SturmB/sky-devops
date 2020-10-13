@@ -59,6 +59,7 @@ users:
     home_mode: "0750"
     groups:
       - admin
+      - www-data
     append: yes
     shell: /bin/bash
   - username: "travis"
