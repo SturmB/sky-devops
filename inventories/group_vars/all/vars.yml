@@ -8,18 +8,20 @@ web_root: /var/www/html
 
 
 do_droplets:
-  - shortname: abl
+  - short_name: abl
     domain: autumnblazelodge.com
     d_index: DirectoryIndex default.htm index.php index.html
-  - shortname: cupnapkin
+  - short_name: cupnapkin
     domain: cupnapkin.com
-  - shortname: sky
+  - short_name: sky
     domain: skyunlimitedinc.com
-  - shortname: acs
+  - short_name: acs
+    long_name: American Cabin Supply
     domain: americancabin.com
     doc_root: "{{ web_root }}/public"
     framework: laravel
-  - shortname: ays
+  - short_name: ays
+    long_name: American Yacht Supply
     domain: americanyachtsupply.com
     doc_root: "{{ web_root }}/public"
     framework: laravel
