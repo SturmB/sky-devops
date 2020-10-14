@@ -4,20 +4,24 @@ ssl_key: "/etc/ssl/private/mail.skyunlimitedinc.com.key"
 ssl_cert_client: "/etc/ssl/certs/mail.skyunlimitedinc.com.crt"
 ssl_cert_ca: "/etc/ssl/certs/mail.skyunlimitedinc.com.chained.crt"
 
+web_root: /var/www/html
+
+
 do_droplets:
   - shortname: abl
     domain: autumnblazelodge.com
     d_index: DirectoryIndex default.htm index.php index.html
-    doc_root: /var/www/html
   - shortname: cupnapkin
     domain: cupnapkin.com
-    doc_root: /var/www/html
   - shortname: sky
     domain: skyunlimitedinc.com
-    doc_root: /var/www/html
+  - shortname: acs
+    domain: americancabin.com
+    doc_root: "{{ web_root }}/public"
+    framework: laravel
   - shortname: ays
     domain: americanyachtsupply.com
-    doc_root: /var/www/html/public
+    doc_root: "{{ web_root }}/public"
     framework: laravel
 
 # Database vars
@@ -82,7 +86,7 @@ apache_global_vhost_settings: |
 apache_vhosts:
   - servername: "{{ domain }}"
     serveralias: "www.{{ domain }}"
-    documentroot: "{{ doc_root }}"
+    documentroot: "{{ web_root }}"
     extra_parameters: |2
       {{ d_index }}
         RewriteEngine On
@@ -92,7 +96,7 @@ apache_vhosts:
 apache_vhosts_ssl:
   - servername: "{{ domain }}"
     serveralias: "www.{{ domain }}"
-    documentroot: "{{ doc_root }}"
+    documentroot: "{{ web_root }}"
     certificate_file: "{{ ssl_cert_client }}"
     certificate_key_file: "{{ ssl_key }}"
     certificate_chain_file: "{{ ssl_cert_ca }}"

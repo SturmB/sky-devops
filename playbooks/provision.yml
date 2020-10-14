@@ -1,6 +1,10 @@
 ---
 - name: Provision the droplets
   hosts: localhost
+  tags:
+    - droplet
+    - laravel
+    - acs
   connection: local
   gather_facts: false
 
@@ -24,9 +28,6 @@
           - "{{ item.shortname }}"
       loop: "{{ do_droplets }}"
       register: droplet
-      tags:
-        - droplet
-        - laravel
 
     - name: Add new hosts to inventory
       add_host:
@@ -45,32 +46,26 @@
       loop: "{{ droplet.results }}"
       loop_control:
         label: "{{ item.data.droplet.name }}"
-      tags:
-        - droplet
-        - laravel
 
 - name: Prepare the droplets
   hosts: do
+  tags: 
+    - droplet
+    - laravel
   remote_user: root
   gather_facts: no
 
   pre_tasks:
     - name: Wait up to 600 seconds for target connection to become reachable/usable
       wait_for_connection:
-      tags:
-        - droplet
     
     - name: Gather Facts
       setup:
-      tags:
-        - droplet
 
   tasks:
     - name: Ensure users are created
       include_role:
         name: weareinteractive.users
-      tags:
-        - droplet
 
     - name: Ensure the web root is writable for the `www-data` group
       file:
@@ -78,8 +73,6 @@
         state: directory
         mode: g+w
         recurse: yes
-      tags:
-        - droplet
 
     - name: Ensure `default.htm` is the first index file Apache looks for
       lineinfile:
@@ -92,7 +85,6 @@
       notify:
         - Restart Apache
       tags:
-        - droplet
         - abl
 
     - name: Ensure private key exists
@@ -102,8 +94,6 @@
         owner: root
         group: root
         mode: 0600
-      tags:
-        - droplet
 
     - name: Ensure client certificate exists
       copy:
@@ -112,8 +102,6 @@
         owner: root
         group: root
         mode: 0644
-      tags:
-        - droplet
 
     - name: Ensure intermediate certificates exist
       copy:
@@ -122,14 +110,10 @@
         owner: root
         group: root
         mode: 0644
-      tags:
-        - droplet
 
     - name: Ensure apache is installed and configured
       include_role:
         name: geerlingguy.apache
-      tags:
-        - droplet
 
     - name: Add additional lines to the vhosts config file
       replace:
@@ -141,7 +125,6 @@
       when: "'do_abl' in group_names"
       notify: Restart Apache
       tags:
-        - droplet
         - abl
         - never
 
@@ -156,8 +139,6 @@
           \6\7
         validate: netplan apply --debug %s
       notify: Restart Droplet
-      tags:
-        - droplet
 
   handlers:
     - name: Restart Apache
@@ -170,7 +151,9 @@
 
 - name: Set up for a Laravel site/app
   hosts: laravel
-  tags: laravel
+  tags:
+    - droplet
+    - laravel
   remote_user: root
 
   roles:
@@ -189,7 +172,15 @@
         update_cache: yes
       notify: Restart Apache
       tags:
-        - droplet
+        - acs
+        - ays
+    
+    - name: Get info on `.env` file
+      stat:
+        path: /var/www/html/.env
+      register: dotenv_result
+      tags:
+        - acs
         - ays
 
     - name: Ensure production-ready `.env` file exists
@@ -199,9 +190,19 @@
         owner: www-data
         group: www-data
         mode: 0664
+      when: not dotenv_result.stat.exists
       tags:
-        - droplet
+        - acs
         - ays
+
+    - name: Ensure DocumentRoot is fixed
+      replace:
+        path: /etc/apache2/sites-available/vhosts.conf
+        regexp: (^\s+DocumentRoot)(\s+.*)?$
+        replace: '\1 "{{ doc_root }}"'
+      notify: Restart Apache
+      tags:
+        - acs
 
   handlers:
     - name: Restart Apache
