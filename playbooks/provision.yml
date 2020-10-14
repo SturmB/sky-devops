@@ -203,6 +203,7 @@
       notify: Restart Apache
       tags:
         - acs
+        - ays
 
   handlers:
     - name: Restart Apache
