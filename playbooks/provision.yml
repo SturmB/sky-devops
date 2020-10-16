@@ -4,7 +4,6 @@
   tags:
     - droplet
     - laravel
-    - acs
   connection: local
   gather_facts: false
 
@@ -13,7 +12,7 @@
       digital_ocean_droplet:
         oauth_token: "{{ lookup('env', 'DO_API_TOKEN') }}"
         state: present
-        name: "{{ item.short_name }}-01"
+        name: "{{ item.short_name | mandatory }}-01"
         backups: yes
         private_networking: yes
         size: s-1vcpu-1gb
@@ -25,21 +24,21 @@
         wait: yes
         wait_timeout: 300
         tags:
-          - "{{ item.short_name }}"
+          - "{{ item.short_name | mandatory }}"
       loop: "{{ do_droplets }}"
       register: droplet
 
     - name: Add new hosts to inventory
       add_host:
-        name: "{{ item.data.droplet.name }}"
-        ansible_host: "{{ item.data.ip_address }}"
+        name: "{{ item.data.droplet.name | mandatory }}"
+        ansible_host: "{{ item.data.ip_address | mandatory }}"
         groups:
           - do
-          - do_{{ item.item.short_name }}
+          - do_{{ item.item.short_name | mandatory }}
           - "{{ item.item.framework | default('static_html') }}"
-        short_name: "{{ item.item.short_name }}"
+        short_name: "{{ item.item.short_name | mandatory }}"
         long_name: "{{ item.item.long_name | default('') }}"
-        domain: "{{ item.item.domain }}"
+        domain: "{{ item.item.domain | mandatory }}"
         d_index: "{{ item.item.d_index | default('') }}"
         doc_root: "{{ item.item.doc_root | default('/var/www/html') }}"
       when: item.data is defined
@@ -88,29 +87,8 @@
       tags:
         - abl
 
-    - name: Ensure private key exists
-      copy:
-        src: ~/ssl/sky.key
-        dest: "{{ ssl_key }}"
-        owner: root
-        group: root
-        mode: 0600
-
-    - name: Ensure client certificate exists
-      copy:
-        src: ~/ssl/cert.crt
-        dest: "{{ ssl_cert_client }}"
-        owner: root
-        group: root
-        mode: 0644
-
-    - name: Ensure intermediate certificates exist
-      copy:
-        src: ~/ssl/cacerts.crt
-        dest: "{{ ssl_cert_ca }}"
-        owner: root
-        group: root
-        mode: 0644
+    - name: Ensire SSL certificates are in place
+      import_tasks: ../tasks/ssl_certificate.yml
 
     - name: Ensure apache is installed and configured
       include_role:
@@ -155,6 +133,8 @@
   tags:
     - droplet
     - laravel
+    - acs
+    - ays
   remote_user: root
 
   roles:
@@ -172,17 +152,11 @@
         state: present
         update_cache: yes
       notify: Restart Apache
-      tags:
-        - acs
-        - ays
     
     - name: Get info on `.env` file
       stat:
         path: /var/www/html/.env
       register: dotenv_result
-      tags:
-        - acs
-        - ays
 
     - name: Ensure production-ready `.env` file exists
       template:
@@ -192,9 +166,6 @@
         group: www-data
         mode: 0664
       when: not dotenv_result.stat.exists
-      tags:
-        - acs
-        - ays
 
     - name: Ensure DocumentRoot is fixed
       replace:
@@ -202,9 +173,133 @@
         regexp: (^\s+DocumentRoot)(\s+.*)?$
         replace: '\1 "{{ doc_root }}"'
       notify: Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+
+- name: Set up for a Redmine app
+  hosts: do_redmine
+  tags:
+    - droplet
+    - redmine
+  remote_user: root
+
+  tasks:
+    - name: Ensure necessary apt packages are installed
+      apt:
+        name:
+          - python3-pymysql
+          - redmine
+          - redmine-mysql
+          - libapache2-mod-passenger
+        state: latest
+        update_cache: yes
+
+    - name: Ensure DB exists
+      mysql_db:
+        name: redmine
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        collation: utf8mb4_0900_ai_ci
+
+    - name: Ensure DB user exists
+      mysql_user:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        name: redmine
+        state: present
+        password: "{{ redmine_password }}"
+        host: localhost
+        priv: redmine.*:ALL
+
+    - name: Ensure necessary apt packages are installed
+      apt:
+        name:
+          - redmine
+          - redmine-mysql
+          - libapache2-mod-passenger
+        state: latest
       tags:
-        - acs
-        - ays
+        - never
+
+    - name: Ensure bundler is installed
+      gem:
+        name: bundler
+        state: latest
+
+    - name: Ensure Passenger's Apache mod is installed
+      apache2_module:
+        name: passenger
+        state: present
+
+    - name: Ensure Passenger is configured for Redmine
+      lineinfile:
+        path: /etc/apache2/mods-available/passenger.conf
+        state: present
+        insertafter: ^<IfModule
+        line: "  PassengerDefaultUser www-data"
+
+    - name: Ensure web document space is symlinked
+      file:
+        path: /var/www/html/redmine
+        src: /usr/share/redmine/public
+        state: link
+
+    - name: Ensure apache is installed and configured
+      include_role:
+        name: geerlingguy.apache
+
+    - name: Add additional lines to the vhosts config file
+      replace:
+        path: /etc/apache2/sites-available/vhosts.conf
+        regexp: (^\s+</Directory>)
+        replace: |2
+              RailsBaseURI /redmine
+              PassengerResolveSymlinksInDocumentRoot on
+          \1
+
+    - name: Ensure Gemfile.lock exists
+      copy:
+        dest: /usr/share/redmine/Gemfile.lock
+        content: ""
+        force: no
+        owner: www-data
+        group: www-data
+
+    - name: Ensure Redmine is enabled
+      command:
+        cmd: a2ensite vhosts.conf
+        creates: /etc/apache2/sites-enabled/vhosts.conf
+      notify: Restart Apache
+      tags:
+        - never
+
+    - name: Ensure Redmine is using the correct database information
+      template:
+        src: ../templates/database.yml.j2
+        dest: /etc/redmine/default/database.yml
+        owner: root
+        group: www-data
+        mode: 0640
+      notify: Restart Apache
+
+    - name: Ensure Redmine's email settings are configured
+      template:
+        src: ../templates/configuration.yml.j2
+        dest: /etc/redmine/default/configuration.yml
+        owner: root
+        group: www-data
+        mode: 0644
+      notify: Restart Apache
+    
+    - name: Ensure Redmine's restart file is touched
+      copy:
+        dest: /usr/share/redmine/tmp/restart.txt
+        content: |
+          restart
+      notify: Restart Apache
 
   handlers:
     - name: Restart Apache

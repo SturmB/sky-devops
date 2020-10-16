@@ -5,7 +5,7 @@ ssl_cert_client: "/etc/ssl/certs/mail.skyunlimitedinc.com.crt"
 ssl_cert_ca: "/etc/ssl/certs/mail.skyunlimitedinc.com.chained.crt"
 
 web_root: /var/www/html
-
+admin_email: itdept@skyunlimitedinc.com
 
 do_droplets:
   - short_name: abl
@@ -24,6 +24,10 @@ do_droplets:
     long_name: American Yacht Supply
     domain: americanyachtsupply.com
     doc_root: "{{ web_root }}/public"
+    framework: laravel
+  - short_name: redmine
+    domain: dev.skyunlimitedinc.com
+    doc_root: "{{ web_root }}/redmine"
     framework: laravel
 
 # Database vars
@@ -88,6 +92,7 @@ apache_global_vhost_settings: |
 apache_vhosts:
   - servername: "{{ domain }}"
     serveralias: "www.{{ domain }}"
+    serveradmin: "{{ admin_email }}"
     documentroot: "{{ web_root }}"
     extra_parameters: |2
       {{ d_index }}
@@ -98,6 +103,7 @@ apache_vhosts:
 apache_vhosts_ssl:
   - servername: "{{ domain }}"
     serveralias: "www.{{ domain }}"
+    serveradmin: "{{ admin_email }}"
     documentroot: "{{ web_root }}"
     certificate_file: "{{ ssl_cert_client }}"
     certificate_key_file: "{{ ssl_key }}"

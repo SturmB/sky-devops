@@ -1,0 +1,24 @@
+---
+- name: Ensure private key exists
+  copy:
+    src: ~/ssl/sky.key
+    dest: "{{ ssl_key | mandatory }}"
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Ensure client certificate exists
+  copy:
+    src: ~/ssl/cert.crt
+    dest: "{{ ssl_cert_client | mandatory }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Ensure intermediate certificates exist
+  copy:
+    src: ~/ssl/cacerts.crt
+    dest: "{{ ssl_cert_ca | mandatory }}"
+    owner: root
+    group: root
+    mode: 0644

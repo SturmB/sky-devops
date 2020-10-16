@@ -73,7 +73,7 @@
 
 - name: Ensure the Environment Variables file is in place
   template:
-    src: ../templates/.env.j2
+    src: ../templates/docker.env.j2
     dest: "{{ work_dir }}/.env"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"

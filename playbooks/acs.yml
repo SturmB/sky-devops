@@ -16,7 +16,7 @@
 
   tasks:
     - name: Bring common containers online
-      import_tasks: ../tasks/common.yml
+      import_tasks: ../tasks/common-docker.yml
 
     - name: Ensure `acsays-dbdata` volume exists
       docker_volume:

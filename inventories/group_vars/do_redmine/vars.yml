@@ -1,9 +1,5 @@
 ---
 # Droplet Config vars
-ssl_key: "/etc/ssl/private/wildcard.skyunlimitedinc.com.key"
-ssl_cert_client: "/etc/ssl/certs/wildcard.skyunlimitedinc.com.crt"
-ssl_cert_ca: "/etc/ssl/certs/wildcard.skyunlimitedinc.com.chained.crt"
-site_num: 3
 site_name: dev.skyunlimitedinc.com
 
 # Database vars
@@ -17,23 +13,22 @@ gmx_username: "{{ vault_gmx_username }}"
 gmx_password: "{{ vault_gmx_password }}"
 
 # geerlingguy.apache
-# apache_global_vhost_settings: |
-#   DirectoryIndex default.htm index.php index.html
 apache_vhosts:
-  - servername: "{{ site_name }}"
-    serveradmin: "itdept@skyunlimitedinc.com"
+  - servername: "{{ domain }}"
+    serveradmin: "{{ admin_email }}"
     documentroot: "/var/www/html/redmine"
-    extra_parameters: |
-      RewriteCond %{SERVER_NAME} ={{ site_name }}
+    extra_parameters: |2
+      RewriteCond %{SERVER_NAME} ={{ domain }}
         RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 apache_vhosts_ssl:
-  - servername: "{{ site_name }}"
+  - servername: "{{ domain }}"
+    serveradmin: "{{ admin_email }}"
     documentroot: "/var/www/html/redmine"
     certificate_file: "{{ ssl_cert_client }}"
     certificate_key_file: "{{ ssl_key }}"
     certificate_chain_file: "{{ ssl_cert_ca }}"
-    extra_parameters: |
+    extra_parameters: |2
       ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
