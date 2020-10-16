@@ -28,7 +28,6 @@ do_droplets:
   - short_name: redmine
     domain: dev.skyunlimitedinc.com
     doc_root: "{{ web_root }}/redmine"
-    framework: laravel
 
 # Database vars
 db_acsays_database: "{{ vault_db_acsays_database }}"

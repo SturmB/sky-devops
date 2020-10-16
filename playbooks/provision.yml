@@ -247,10 +247,6 @@
         src: /usr/share/redmine/public
         state: link
 
-    - name: Ensure apache is installed and configured
-      include_role:
-        name: geerlingguy.apache
-
     - name: Add additional lines to the vhosts config file
       replace:
         path: /etc/apache2/sites-available/vhosts.conf
