@@ -214,16 +214,6 @@
         host: localhost
         priv: redmine.*:ALL
 
-    - name: Ensure necessary apt packages are installed
-      apt:
-        name:
-          - redmine
-          - redmine-mysql
-          - libapache2-mod-passenger
-        state: latest
-      tags:
-        - never
-
     - name: Ensure bundler is installed
       gem:
         name: bundler
@@ -233,6 +223,7 @@
       apache2_module:
         name: passenger
         state: present
+      notify: Restart Apache
 
     - name: Ensure Passenger is configured for Redmine
       lineinfile:
@@ -240,6 +231,7 @@
         state: present
         insertafter: ^<IfModule
         line: "  PassengerDefaultUser www-data"
+      notify: Restart Apache
 
     - name: Ensure web document space is symlinked
       file:
@@ -255,6 +247,7 @@
               RailsBaseURI /redmine
               PassengerResolveSymlinksInDocumentRoot on
           \1
+      notify: Restart Apache
 
     - name: Ensure Gemfile.lock exists
       copy:
@@ -263,14 +256,6 @@
         force: no
         owner: www-data
         group: www-data
-
-    - name: Ensure Redmine is enabled
-      command:
-        cmd: a2ensite vhosts.conf
-        creates: /etc/apache2/sites-enabled/vhosts.conf
-      notify: Restart Apache
-      tags:
-        - never
 
     - name: Ensure Redmine is using the correct database information
       template:
