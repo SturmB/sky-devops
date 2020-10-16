@@ -1,5 +1,7 @@
 # DevOps for Sky
 
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit) ![Ansible Lint](https://github.com/SturmB/sky-devops/workflows/Ansible%20Lint/badge.svg)
+
 This repo is for managing the web sites and web apps for Sky Unlimited, Inc.
 
 **Table of Contents:**
@@ -20,7 +22,7 @@ There are two kinds of sites/apps on **SkyUbuntu**:
 - Staging servers for testing the new versions of the [American Cabin Supply][cabin] and [American Yacht Supply][yacht] web sites
 - [Sky Schedule][schedule] production app.
 
-Depending on which type of server you want to create/adjust, please reference `Manage Staging Servers` and `Manage Sky Schedule`, below.
+Depending on which type of server you want to create/adjust, please reference [Manage Staging Servers](#manage-staging-servers) and [Manage Sky Schedule](#manage-sky-schedule), below.
 
 If you want to manage _all_ of the servers on **SkyUbuntu**, run the following:
 
