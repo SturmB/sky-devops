@@ -2,7 +2,7 @@
 - name: Ensure Aptitude is installed
   apt:
     name: aptitude
-    state: latest
+    state: present
     update_cache: yes
     force_apt_get: yes
   become: yes
@@ -16,7 +16,7 @@
 - name: Ensure dependencies are installed
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
     update_cache: yes
   loop:
     - apt-transport-https
@@ -46,7 +46,7 @@
     - ays
 
 - name: Ensure the HAProxy's config file is in place
-  template:
+  template: # noqa 404 - This is not a role
     src: ../templates/haproxy.cfg.j2
     dest: "{{ config_dir }}/haproxy/haproxy.cfg"
     owner: "{{ ansible_user }}"
@@ -72,7 +72,7 @@
     - ays
 
 - name: Ensure the Environment Variables file is in place
-  template:
+  template: # noqa 404 - This is not a role
     src: ../templates/docker.env.j2
     dest: "{{ work_dir }}/.env"
     owner: "{{ ansible_user }}"
@@ -85,7 +85,7 @@
     - ays
 
 - name: Ensure the `docker-compose.yml` file is in place
-  template:
+  template: # noqa 404 - This is not a role
     src: ../templates/docker-compose.yml.j2
     dest: "{{ work_dir }}/docker-compose.yml"
     owner: "{{ ansible_user }}"
