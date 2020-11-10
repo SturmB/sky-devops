@@ -66,6 +66,18 @@ services:
     networks:
       - web
 
+  # American Accents site (Apache & PHP services)
+  aa:
+    image: "sturmb/sky-aa"
+    container_name: aa
+    restart: unless-stopped
+    working_dir: /var/www/html
+    ports:
+      - "8080:80"
+      - "4443:443"
+    networks:
+      - web
+
   # MySQL Service for the Sky Schedule database
   schedule-db:
     image: mysql:5.7.29

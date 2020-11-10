@@ -1,0 +1,31 @@
+---
+- name: Manage Docker
+  hosts: all:!local
+  gather_facts: yes
+
+  tasks:
+    - name: Ensure Docker is installed
+      include_role:
+        name: geerlingguy.docker
+        apply:
+          become: yes
+
+- name: Manage AA
+  hosts: all
+  gather_facts: yes
+
+  tasks:
+    - name: Bring common containers online
+      import_tasks: ../tasks/common-docker.yml
+
+    - name: Ensure the American Accents site is running
+      docker_compose:
+        project_src: "{{ work_dir }}"
+        state: present
+        recreate: "{{ recreate_containers }}"
+        services:
+          - balancer
+          - aa
+      tags:
+        - docker
+        - aa

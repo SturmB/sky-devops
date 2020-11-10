@@ -44,6 +44,7 @@
     - schedule
     - acs
     - ays
+    - aa
 
 - name: Ensure the HAProxy's config file is in place
   template: # noqa 404 - This is not a role
@@ -57,6 +58,7 @@
     - schedule
     - acs
     - ays
+    - aa
 
 - name: Ensure the MySQL config file is in place
   copy:
@@ -96,3 +98,4 @@
     - schedule
     - acs
     - ays
+    - aa
