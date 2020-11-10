@@ -20,11 +20,13 @@ frontend http-in
   acl host_schedule hdr(Host) -i {{ 'local-sky-schedule' if inventory_hostname == 'localhost' else 'sky-schedule' }}
   acl host_acs hdr(Host) -i {{ 'local-acs' if inventory_hostname == 'localhost' else 'acs' }}
   acl host_ays hdr(Host) -i {{ 'local-ays' if inventory_hostname == 'localhost' else 'ays' }}
+  acl host_aa hdr(Host) -i {{ 'local-aa' if inventory_hostname == 'localhost' else 'aa' }}
 
   ## figure out which one to use
   use_backend schedule if host_schedule
   use_backend acs if host_acs
   use_backend ays if host_ays
+  use_backend aa if host_aa
 
   default_backend acs
 
@@ -64,6 +66,16 @@ backend ays
   http-check send hdr Host localhost
   # http-check disable-on-404
   server ays-01 ays:80 check init-addr last,libc,none
+
+backend aa
+  balance roundrobin
+  option forwardfor
+  http-request set-header X-Forwarded-Port %[dst_port]
+  http-request add-header X-Forwarded-Proto https if { ssl_fc }
+  option httpchk HEAD / HTTP/1.1
+  http-check send hdr Host localhost
+  # http-check disable-on-404
+  server aa-01 aa:80 check init-addr last,libc,none
 
 listen stats
   bind *:1936
