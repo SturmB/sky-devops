@@ -29,7 +29,7 @@
   become: yes
 
 - name: Ensure the `web` network exists
-  docker_network:
+  community.general.docker_network:
     name: web
     driver: bridge
     state: present

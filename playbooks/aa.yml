@@ -19,7 +19,7 @@
       import_tasks: ../tasks/common-docker.yml
 
     - name: Ensure the American Accents site is running
-      docker_compose:
+      community.general.docker_compose:
         project_src: "{{ work_dir }}"
         state: present
         recreate: "{{ recreate_containers }}"

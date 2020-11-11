@@ -19,7 +19,7 @@
       import_tasks: ../tasks/common-docker.yml
 
     - name: Ensure `schedule-dbdata` volume exists
-      docker_volume:
+      community.general.docker_volume:
         volume_name: schedule-dbdata
         state: present
         driver: local
@@ -29,7 +29,7 @@
         - schedule
 
     - name: Ensure the Sky Schedule app is running
-      docker_compose:
+      community.general.docker_compose:
         project_src: .
         state: present
         recreate: "{{ recreate_containers }}"

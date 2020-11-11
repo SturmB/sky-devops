@@ -19,7 +19,7 @@
       import_tasks: ../tasks/common-docker.yml
 
     - name: Ensure `schedule-dbdata` volume exists
-      docker_volume:
+      community.general.docker_volume:
         volume_name: schedule-dbdata
         state: present
         driver: local
@@ -29,7 +29,7 @@
         - schedule
 
     - name: Ensure `acsays-dbdata` volume exists
-      docker_volume:
+      community.general.docker_volume:
         volume_name: acsays-dbdata
         state: present
         driver: local
@@ -40,7 +40,7 @@
         - ays
 
     - name: Ensure all of the sites/apps are running
-      docker_compose:
+      community.general.docker_compose:
         project_src: .
         state: present
         recreate: "{{ recreate_containers }}"
