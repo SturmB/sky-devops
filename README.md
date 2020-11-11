@@ -13,13 +13,13 @@ This repo is for managing the web sites and web apps for Sky Unlimited, Inc.
   - [Managing Production Servers on **DigitalOcean**](#managing-production-servers-on-digitalocean)
   - [Future Plans](#future-plans)
 
-Depending on which playbooks are run, it will either manage the web sites or [Sky Schedule][schedule] on a staging server or provision production servers on DigialOcean.
+Depending on which playbooks are run, it will either manage the web sites or [Sky Schedule][schedule] on a staging server; or provision production servers on DigialOcean.
 
 ## Managing Sites/Apps for the Internal Server, SkyUbuntu
 
 There are two kinds of sites/apps on **SkyUbuntu**:
 
-- Staging servers for testing the new versions of the [American Cabin Supply][cabin] and [American Yacht Supply][yacht] web sites
+- Staging servers for testing the new versions of the [American Accents][accents], [American Cabin Supply][cabin], and [American Yacht Supply][yacht] web sites.
 - [Sky Schedule][schedule] production app.
 
 Depending on which type of server you want to create/adjust, please reference [Manage Staging Servers](#manage-staging-servers) and [Manage Sky Schedule](#manage-sky-schedule), below.
@@ -71,5 +71,6 @@ Please note that this will only create the production droplets, install the nece
 Time permitting, I would very much like to have the live production servers on **DigitalOcean** use **Docker**, like **SkyUbuntu** does. However, to make it work with **Travis CI**, I will need to research having Travis create the Docker bundle and upload it to **Docker Hub**, then have Docker Hub be triggered to upload to the production servers.
 
 [schedule]: https://github.com/SturmB/sky-schedule
+[accents]: https://github.com/skyunlimitedinc/aa
 [cabin]: https://github.com/skyunlimitedinc/acs
 [yacht]: https://github.com/skyunlimitedinc/ays
