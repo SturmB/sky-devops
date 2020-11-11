@@ -61,7 +61,7 @@ users:
   - username: "sturm"
     name: Chris McGee
     uid: 1000
-    password: "{{ vault_user_password | password_hash('sha512') }}"
+    password: "{{ vault_user_password | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"
     authorized_keys:
       - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     home_create: yes
