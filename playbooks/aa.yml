@@ -30,3 +30,10 @@
       tags:
         - docker
         - aa
+
+    - name: Prune images
+      community.general.docker_prune:
+        images: yes
+      tags:
+        - docker
+        - aa
