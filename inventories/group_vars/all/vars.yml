@@ -43,7 +43,7 @@ upgrade_schedule: no
 
 # Miscellaneous vars
 # `recreate_containers` can be `always`, `never`, or `smart` (default).
-recreate_containers: always
+recreate_containers: smart
 work_dir: ~/web
 config_dir: "{{ work_dir }}/config"
 
