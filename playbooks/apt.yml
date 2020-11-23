@@ -1,0 +1,23 @@
+---
+- name: Update and upgrade packages
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - name: Check to see if a reboot is required
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_required_file
+      changed_when: reboot_required_file.stat.exists
+      notify: reboot
+
+    - name: Update package manager
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: "yes"
+      become: yes
+
+  handlers:
+    - name: reboot
+      ansible.builtin.reboot:
+      become: yes
