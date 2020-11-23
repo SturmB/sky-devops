@@ -11,6 +11,7 @@ This repo is for managing the web sites and web apps for Sky Unlimited, Inc.
     - [Manage Staging Servers](#manage-staging-servers)
     - [Manage Sky Schedule](#manage-sky-schedule)
   - [Managing Production Servers on **DigitalOcean**](#managing-production-servers-on-digitalocean)
+  - [Updating Packages](#updating-packages)
   - [Future Plans](#future-plans)
 
 Depending on which playbooks are run, it will either manage the web sites or [Sky Schedule][schedule] on a staging server; or provision production servers on DigialOcean.
@@ -60,11 +61,23 @@ ansible-playbook playbooks/schedule.yml
 
 To provision the production droplets on **DigitalOcean**, run the command
 
-```sh
-ansible-playbook playbooks/provision.yml
+```text
+ansible-playbook do-prep.yml
 ```
 
 Please note that this will only create the production droplets, install the necessary dependencies, and get **Apache** ready for serving the sites. It _will not_ transfer the actual site files to the droplets. For that, **Travis CI** is set up to watch any pushes to the **master** branches of their respective repositories on GitHub.
+
+## Updating Packages
+
+As a part of regular maintenance, upgrade the packages and reboot the servers as necessary with
+
+```text
+ansible-playbook update-packages.yml
+```
+
+This will affect _all_ hosts, including **SkyUbuntu**, **localhost**, and the hosts on Digital Ocean.
+
+---
 
 ## Future Plans
 
