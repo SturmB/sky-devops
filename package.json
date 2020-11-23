@@ -1,0 +1,19 @@
+{
+  "name": "sky-devops",
+  "version": "1.0.0",
+  "description": "DevOps for Sky Unlimited, Inc.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SturmB/sky-devops.git"
+  },
+  "author": "Chris McGee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SturmB/sky-devops/issues"
+  },
+  "homepage": "https://github.com/SturmB/sky-devops#readme"
+}
