@@ -30,13 +30,21 @@
 
     - name: Ensure the Sky Schedule app is running
       community.general.docker_compose:
-        project_src: .
+        project_src: "{{ work_dir }}"
         state: present
+        pull: yes
         recreate: "{{ recreate_containers }}"
         services:
           - balancer
           - schedule
           - schedule-db
+      tags:
+        - docker
+        - schedule
+
+    - name: Prune images
+      community.general.docker_prune:
+        images: yes
       tags:
         - docker
         - schedule

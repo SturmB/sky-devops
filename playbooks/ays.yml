@@ -31,13 +31,21 @@
 
     - name: Ensure the American Yacht Supply site is running
       community.general.docker_compose:
-        project_src: .
+        project_src: "{{ work_dir }}"
         state: present
+        pull: yes
         recreate: "{{ recreate_containers }}"
         services:
           - balancer
           - ays
           - acsays-db
+      tags:
+        - docker
+        - ays
+
+    - name: Prune images
+      community.general.docker_prune:
+        images: yes
       tags:
         - docker
         - ays

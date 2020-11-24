@@ -41,8 +41,9 @@
 
     - name: Ensure all of the sites/apps are running
       community.general.docker_compose:
-        project_src: .
+        project_src: "{{ work_dir }}"
         state: present
+        pull: yes
         recreate: "{{ recreate_containers }}"
         services:
           - balancer
@@ -51,8 +52,20 @@
           - acs
           - ays
           - acsays-db
+          - aa
       tags:
         - docker
         - schedule
         - acs
         - ays
+        - aa
+
+    - name: Prune images
+      community.general.docker_prune:
+        images: yes
+      tags:
+        - docker
+        - schedule
+        - acs
+        - ays
+        - aa

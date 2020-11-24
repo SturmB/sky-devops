@@ -31,13 +31,21 @@
 
     - name: Ensure the American Cabin Supply site is running
       community.general.docker_compose:
-        project_src: .
+        project_src: "{{ work_dir }}"
         state: present
+        pull: yes
         recreate: "{{ recreate_containers }}"
         services:
           - balancer
           - acs
           - acsays-db
+      tags:
+        - docker
+        - acs
+
+    - name: Prune images
+      community.general.docker_prune:
+        images: yes
       tags:
         - docker
         - acs
