@@ -8,17 +8,21 @@
       community.mysql.mysql_db:
         name: "{{ db_schedule_database }}"
         state: dump
+        dump_extra_args: --column-statistics=0
         target: /tmp/{{ db_schedule_database }}.sql
-        login_host: 127.0.0.1
+        login_host: "{{ ansible_host }}"
         login_port: 3306
         login_user: "{{ vault_db_admin_username }}"
         login_password: "{{ vault_db_admin_password }}"
+        delegate_to: localhost
 
     - name: Copy dump to local testing server
       ansible.builtin.fetch:
         src: /tmp/{{ db_schedule_database }}.sql
         dest: /tmp/{{ db_schedule_database }}.sql
         flat: yes
+      tags:
+        - never
 
 - name: Import live Sky Schedule database dump to test server
   hosts: localhost
@@ -30,5 +34,7 @@
         name: "{{ db_schedule_database }}"
         state: import
         target: /tmp/{{ db_schedule_database }}.sql
+        login_host: 127.0.0.1
+        login_port: 3306
         login_user: "{{ vault_db_admin_username }}"
         login_password: "{{ vault_db_admin_password }}"
