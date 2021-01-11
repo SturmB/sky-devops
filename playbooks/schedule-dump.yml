@@ -1,0 +1,34 @@
+---
+- name: Get copy of live Sky Schedule database
+  hosts: skyubuntu
+  gather_facts: yes
+
+  tasks:
+    - name: Dump Sky Schedule database
+      community.mysql.mysql_db:
+        name: "{{ db_schedule_database }}"
+        state: dump
+        target: /tmp/{{ db_schedule_database }}.sql
+        login_host: 127.0.0.1
+        login_port: 3306
+        login_user: "{{ vault_db_admin_username }}"
+        login_password: "{{ vault_db_admin_password }}"
+
+    - name: Copy dump to local testing server
+      ansible.builtin.fetch:
+        src: /tmp/{{ db_schedule_database }}.sql
+        dest: /tmp/{{ db_schedule_database }}.sql
+        flat: yes
+
+- name: Import live Sky Schedule database dump to test server
+  hosts: localhost
+  gather_facts: yes
+
+  tasks:
+    - name: Import dump
+      community.mysql.mysql_db:
+        name: "{{ db_schedule_database }}"
+        state: import
+        target: /tmp/{{ db_schedule_database }}.sql
+        login_user: "{{ vault_db_admin_username }}"
+        login_password: "{{ vault_db_admin_password }}"

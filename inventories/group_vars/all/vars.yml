@@ -34,6 +34,8 @@ db_acsays_database: "{{ vault_db_acsays_database }}"
 db_schedule_database: "{{ vault_db_schedule_database }}"
 db_username: "{{ vault_db_username }}"
 db_password: "{{ vault_db_password }}"
+db_admin_username: "{{ vault_db_admin_username }}"
+db_admin_password: "{{ vault_db_admin_password }}"
 
 # Upgrade vars
 upgrade_aa: no
@@ -51,6 +53,9 @@ config_dir: "{{ work_dir }}/config"
 pip_install_packages:
   - name: docker
   - name: docker-compose
+  - name: PyMySQL
+  - name: PyMySQL[rsa]
+  - name: PyMySQL[ed25519]
 
 # geerlingguy.docker
 docker_users:
