@@ -14,7 +14,7 @@
         login_port: 3306
         login_user: "{{ vault_db_admin_username }}"
         login_password: "{{ vault_db_admin_password }}"
-        delegate_to: localhost
+      delegate_to: localhost
 
     - name: Copy dump to local testing server
       ansible.builtin.fetch:
