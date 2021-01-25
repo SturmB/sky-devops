@@ -8,7 +8,7 @@
       community.mysql.mysql_db:
         name: "{{ db_schedule_database }}"
         state: dump
-        dump_extra_args: --column-statistics=0
+        dump_extra_args: --column-statistics=0 --opt
         target: /tmp/{{ db_schedule_database }}.sql
         login_host: "{{ ansible_host }}"
         login_port: 3306
