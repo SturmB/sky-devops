@@ -38,6 +38,7 @@
           - balancer
           - schedule
           - schedule-db
+          - redis
       tags:
         - docker
         - schedule
