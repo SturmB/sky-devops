@@ -1,5 +1,38 @@
 # Changelog
 
+<a name="1.1.0"></a>
+## 1.1.0 (2021-01-27)
+
+### Added
+
+- ✨ Adds redis service to docker-compose template [[93c02d9](https://github.com/SturmB/sky-devops/commit/93c02d99236542630847e768223de9f206c59b40)]
+- ✨ Adds the `mysqldump` feature for Sky Schedule [[d836edf](https://github.com/SturmB/sky-devops/commit/d836edf6cc4bd37281b8d6f738f28c5e0ab460a6)]
+
+### Changed
+
+- ♻️ Adds new variable for pulling docker images [[ab8720f](https://github.com/SturmB/sky-devops/commit/ab8720f2ff100132c29ea24d0cd4d87fe7d20ce6)]
+- 👽 Uses latest SHA (59440291) [[ba52bc9](https://github.com/SturmB/sky-devops/commit/ba52bc9aa4affb4606853df69fa21bdb4adb086f)]
+- 🔧 Updates Ansible Lint for the GitHub Action [[b079a5b](https://github.com/SturmB/sky-devops/commit/b079a5bce6bb1cffae72a3afcd325fc8f6d39797)]
+- 🏗️ Fixes staging playbooks to be more stable and clean [[c2cb0be](https://github.com/SturmB/sky-devops/commit/c2cb0bece96ad9e1dd4836ba82ad403c658111dd)]
+
+### Removed
+
+- 🔥 Removes arguments from ansible-lint action [[6dfd714](https://github.com/SturmB/sky-devops/commit/6dfd7145eb9f1ccc667446e9ac6089e78446477a)]
+
+### Fixed
+
+- 🐛 Fixes incorrect indention [[aa5ecbd](https://github.com/SturmB/sky-devops/commit/aa5ecbdaf55cc15f9cfd79922990b2e1111260ae)]
+
+### Miscellaneous
+
+- 📦 Adds redis container for Sky Schedule [[ddb19e7](https://github.com/SturmB/sky-devops/commit/ddb19e7f1acef3148e3e39a4a93c89843fc16b5e)]
+-  🩹 Adds `--opt` during dumping just to be safe [[4bb410a](https://github.com/SturmB/sky-devops/commit/4bb410a910eff703b252131b6b566894a302bec8)]
+- 🚧 Copying Sky Schedule data to local [[b3c1f0e](https://github.com/SturmB/sky-devops/commit/b3c1f0e8e0d08e46d4f948cc9f93e2a120fd492b)]
+- ⚗️ Trying the `targets` parameter [[cac7b43](https://github.com/SturmB/sky-devops/commit/cac7b433e4f26a4b844a605ba2a4d740535b5af2)]
+- 🔨 Adds arguments to ansible-lint action [[ee84830](https://github.com/SturmB/sky-devops/commit/ee84830615f6c6c3f6895984ec0369cb05e061d7)]
+- 🔨 Adds Ansible Lint configuration [[c672690](https://github.com/SturmB/sky-devops/commit/c672690b4abad339082a81b583d9253b612bed96)]
+
+
 <a name="1.0.0"></a>
 ## 1.0.0 (2020-11-23)
 
