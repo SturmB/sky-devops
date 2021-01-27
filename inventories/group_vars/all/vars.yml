@@ -46,6 +46,7 @@ upgrade_schedule: no
 # Miscellaneous vars
 # `recreate_containers` can be `always`, `never`, or `smart` (default).
 recreate_containers: smart
+pull_image: yes
 work_dir: ~/web
 config_dir: "{{ work_dir }}/config"
 

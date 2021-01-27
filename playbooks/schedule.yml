@@ -32,7 +32,7 @@
       community.general.docker_compose:
         project_src: "{{ work_dir }}"
         state: present
-        pull: yes
+        pull: "{{ pull_image }}"
         recreate: "{{ recreate_containers }}"
         services:
           - balancer
