@@ -28,16 +28,17 @@
         - acs
         - ays
 
-    - name: Add the container to inventory
-      ansible.builtin.add_host:
-        name: acsays-db
-        ansible_connection: community.general.docker
-        remote_addr: acsays-db
-      changed_when: false
-      tags:
-        - docker
-        - acs
-        - ays
+    # This is pointless unless the container has a Python interpreter installed.
+    # - name: Add the container to inventory
+    #   ansible.builtin.add_host:
+    #     name: acsays-db
+    #     ansible_connection: community.general.docker
+    #     remote_addr: acsays-db
+    #   changed_when: false
+    #   tags:
+    #     - docker
+    #     - acs
+    #     - ays
 
     - name: Get the generated root password
       shell: "docker logs acsays-db 2>&1 | grep GENERATED"
@@ -53,23 +54,39 @@
     #     - acs
     #     - ays
 
-    - name: Ensure MySQL user `skyadmin` exists
-      delegate_to: acsays-db
+    # This task is useless without Python being installed in the container.
+    # - name: Ensure MySQL user `skyadmin` exists
+    #   delegate_to: acsays-db
+    #   shell: >
+    #     mysql -uroot -p{{ docker_log.stdout.split(':') | last | trim }} -e
+    #     "CREATE USER '{{ vault_db_admin_username }}' IDENTIFIED BY '{{ vault_db_admin_password }}';
+    #     GRANT ALL PRIVILEGES ON *.* TO '{{ vault_db_admin_username }}'@'%' WITH GRANT OPTION;"
+    #   when: docker_log is succeeded and docker_log.stdout | length > 0
+    #   tags:
+    #     - acs
+    #     - ays
+
+    - name: Get list of MySQL users
       shell: >
-        mysql -uroot -p{{ docker_log.stdout.split(':') | last | trim }} -e
-        "CREATE USER {{ vault_db_admin_username }} IDENTIFIED BY {{ vault_db_admin_password }};
-        GRANT ALL PRIVILEGES ON *.* TO '{{ vault_db_admin_username }}'@'%' WITH GRANT OPTION;"
+        docker exec acsays-db mysql -u root --password={{ docker_log.stdout.split(':') | last | trim }} -e
+        "SELECT user FROM mysql.user;"
       when: docker_log is succeeded and docker_log.stdout | length > 0
+      register: mysql_users
       tags:
         - acs
         - ays
 
-    # - name: Ensure MySQL user `skyadmin` exists
-    #   shell: docker exec acsays-db bash -l -c mysql -uroot -p{{ docker_log.stdout.split(':') | last | trim }} -e "CREATE USER {{ vault_db_admin_username }} IDENTIFIED BY {{ vault_db_admin_password }}; GRANT ALL PRIVILEGES ON *.* TO '{{ vault_db_admin_username }}'@'%' WITH GRANT OPTION;"
-    #   when: docker_log is succeeded and docker_log.stdout != ''
-    #   tags:
-    #     - acs
-    #     - ays
+    - name: Ensure MySQL user `skyadmin` exists
+      shell: >
+        docker exec acsays-db mysql -u root --password={{ docker_log.stdout.split(':') | last | trim }} -e
+        "CREATE USER '{{ db_admin_username }}'@'%' IDENTIFIED BY '{{ db_admin_password }}';
+        GRANT ALL PRIVILEGES ON *.* TO '{{ db_admin_username }}'@'%' WITH GRANT OPTION;"
+      when:
+        - docker_log is succeeded and docker_log.stdout | length > 0
+        - mysql_users is not search("{{ db_admin_username }}")
+      tags:
+        - acs
+        - ays
 
     # - name: Ensure MySQL user `skyadmin` exists
     #   community.mysql.mysql_user:
