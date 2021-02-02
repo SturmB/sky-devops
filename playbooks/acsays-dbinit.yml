@@ -1,0 +1,89 @@
+---
+- name: ACS & AYS DB Initializer
+  hosts: all:!local
+  gather_facts: yes
+
+  tasks:
+    - name: Ensure `acsays-dbdata` volume exists
+      community.general.docker_volume:
+        volume_name: acsays-dbdata
+        state: present
+        driver: local
+        recreate: never
+      tags:
+        - docker
+        - acs
+        - ays
+
+    - name: Ensure the American Cabin Supply MySQL container is running
+      community.general.docker_compose:
+        project_src: "{{ work_dir }}"
+        state: present
+        pull: yes
+        recreate: "{{ recreate_containers }}"
+        services:
+          - acsays-db
+      tags:
+        - docker
+        - acs
+        - ays
+
+    - name: Add the container to inventory
+      ansible.builtin.add_host:
+        name: acsays-db
+        ansible_connection: community.general.docker
+        remote_addr: acsays-db
+      changed_when: false
+      tags:
+        - docker
+        - acs
+        - ays
+
+    - name: Get the generated root password
+      shell: "docker logs acsays-db 2>&1 | grep GENERATED"
+      register: docker_log
+      changed_when: false
+      ignore_errors: yes
+
+    # This fails ansible-lint. It also errors, no matter what.
+    # - name: Add Python3
+    #   delegate_to: acsays-db
+    #   raw: apt-get --fix-broken install -y && apt-get update && apt-get install -y python3
+    #   tags:
+    #     - acs
+    #     - ays
+
+    - name: Ensure MySQL user `skyadmin` exists
+      delegate_to: acsays-db
+      shell: >
+        mysql -uroot -p{{ docker_log.stdout.split(':') | last | trim }} -e
+        "CREATE USER {{ vault_db_admin_username }} IDENTIFIED BY {{ vault_db_admin_password }};
+        GRANT ALL PRIVILEGES ON *.* TO '{{ vault_db_admin_username }}'@'%' WITH GRANT OPTION;"
+      when: docker_log is succeeded and docker_log.stdout | length > 0
+      tags:
+        - acs
+        - ays
+
+    # - name: Ensure MySQL user `skyadmin` exists
+    #   shell: docker exec acsays-db bash -l -c mysql -uroot -p{{ docker_log.stdout.split(':') | last | trim }} -e "CREATE USER {{ vault_db_admin_username }} IDENTIFIED BY {{ vault_db_admin_password }}; GRANT ALL PRIVILEGES ON *.* TO '{{ vault_db_admin_username }}'@'%' WITH GRANT OPTION;"
+    #   when: docker_log is succeeded and docker_log.stdout != ''
+    #   tags:
+    #     - acs
+    #     - ays
+
+    # - name: Ensure MySQL user `skyadmin` exists
+    #   community.mysql.mysql_user:
+    #     name: "{{ vault_db_admin_username }}"
+    #     password: "{{ vault_db_admin_password }}"
+    #     host: "%"
+    #     state: present
+    #     priv: "*.*:ALL,GRANT"
+    #     login_host: "localhost"
+    #     login_port: 3326
+    #     login_user: root
+    #     login_password: "{{ docker_log.stdout.split(':') | last | trim }}"
+    #   when: docker_log is succeeded and docker_log.stdout != ''
+    #   delegate_to: "{{ ansible_host }}"
+    #   tags:
+    #     - acs
+    #     - ays
