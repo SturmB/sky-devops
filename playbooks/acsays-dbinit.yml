@@ -72,6 +72,7 @@
         "SELECT user FROM mysql.user;"
       when: docker_log is succeeded and docker_log.stdout | length > 0
       register: mysql_users
+      changed_when: false
       tags:
         - acs
         - ays
@@ -83,7 +84,7 @@
         GRANT ALL PRIVILEGES ON *.* TO '{{ db_admin_username }}'@'%' WITH GRANT OPTION;"
       when:
         - docker_log is succeeded and docker_log.stdout | length > 0
-        - mysql_users is not search("{{ db_admin_username }}")
+        - mysql_users is not search(db_admin_username)
       tags:
         - acs
         - ays
