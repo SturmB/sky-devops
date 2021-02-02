@@ -104,3 +104,39 @@
       tags:
         - acs
         - ays
+
+    - name: Dump ACS/AYS database
+      community.mysql.mysql_db:
+        name: "{{ db_acsays_database }}"
+        state: dump
+        dump_extra_args: --column-statistics=0 --opt
+        target: /tmp/{{ db_acsays_database }}.sql
+        login_host: 127.0.0.1
+        login_port: 3326
+        login_user: "{{ db_admin_username }}"
+        login_password: "{{ db_admin_password }}"
+      delegate_to: localhost
+      tags:
+        - acs
+        - ays
+
+    - name: Copy dumped db file to the host
+      copy:
+        src: /tmp/{{ db_acsays_database }}.sql
+        dest: /tmp
+      tags:
+        - acs
+        - ays
+
+    - name: Import dump
+      community.mysql.mysql_db:
+        name: "{{ db_acsays_database }}"
+        state: import
+        target: /tmp/{{ db_acsays_database }}.sql
+        login_host: "{{ ansible_host }}"
+        login_port: 3326
+        login_user: "{{ db_admin_username }}"
+        login_password: "{{ db_admin_password }}"
+      tags:
+        - acs
+        - ays
