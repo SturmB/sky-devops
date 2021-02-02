@@ -4,7 +4,7 @@
   gather_facts: yes
 
   tasks:
-    - name: Dump Sky Schedule database
+    - name: Dump ACS/AYS database
       community.mysql.mysql_db:
         name: "{{ db_acsays_database }}"
         state: dump
@@ -12,8 +12,8 @@
         target: /tmp/{{ db_acsays_database }}.sql
         login_host: "{{ ansible_host }}"
         login_port: 3326
-        login_user: "{{ vault_db_admin_username }}"
-        login_password: "{{ vault_db_admin_password }}"
+        login_user: "{{ db_admin_username }}"
+        login_password: "{{ db_admin_password }}"
       delegate_to: localhost
 
     - name: Copy dump to local testing server
@@ -36,5 +36,5 @@
         target: /tmp/{{ db_acsays_database }}.sql
         login_host: 127.0.0.1
         login_port: 3326
-        login_user: "{{ vault_db_admin_username }}"
-        login_password: "{{ vault_db_admin_password }}"
+        login_user: "{{ db_admin_username }}"
+        login_password: "{{ db_admin_password }}"
