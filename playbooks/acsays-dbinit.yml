@@ -88,19 +88,18 @@
         - acs
         - ays
 
-    # - name: Ensure MySQL user `skyadmin` exists
-    #   community.mysql.mysql_user:
-    #     name: "{{ vault_db_admin_username }}"
-    #     password: "{{ vault_db_admin_password }}"
-    #     host: "%"
-    #     state: present
-    #     priv: "*.*:ALL,GRANT"
-    #     login_host: "localhost"
-    #     login_port: 3326
-    #     login_user: root
-    #     login_password: "{{ docker_log.stdout.split(':') | last | trim }}"
-    #   when: docker_log is succeeded and docker_log.stdout != ''
-    #   delegate_to: "{{ ansible_host }}"
-    #   tags:
-    #     - acs
-    #     - ays
+    - name: Ensure other MySQL users exist
+      community.mysql.mysql_user:
+        name: "{{ item.username }}"
+        password: "{{ item.password }}"
+        host: "%"
+        state: present
+        priv: "{{ item.privs }}"
+        login_host: "{{ ansible_host }}"
+        login_port: 3326
+        login_user: "{{ db_admin_username }}"
+        login_password: "{{ db_admin_password }}"
+      loop: "{{ db_users }}"
+      tags:
+        - acs
+        - ays

@@ -32,8 +32,19 @@ do_droplets:
 # Database vars
 db_acsays_database: "{{ vault_db_acsays_database }}"
 db_schedule_database: "{{ vault_db_schedule_database }}"
-db_username: "{{ vault_db_username }}"
-db_password: "{{ vault_db_password }}"
+db_users:
+  - username: "{{ vault_web_username }}"
+    password: "{{ vault_web_password }}"
+    privs: "*.*:EXECUTE,SELECT,DELETE,INSERT,UPDATE"
+  - username: "{{ vault_launcher_username }}"
+    password: "{{ vault_launcher_password }}"
+    privs: "*.*:EXECUTE,SELECT,SHOW DATABASES,SHOW VIEW,DELETE,INSERT,TRIGGER,UPDATE"
+  - username: "{{ vault_migrator_username }}"
+    password: "{{ vault_migrator_password }}"
+    privs: "*.*:SELECT,ALTER,CREATE,CREATE VIEW,DELETE,DROP,INDEX,INSERT,REFERENCES,UPDATE"
+  - username: "{{ vault_dds_username }}"
+    password: "{{ vault_dds_password }}"
+    privs: "*.*:EXECUTE,SELECT,DELETE,INSERT,UPDATE"
 db_admin_username: "{{ vault_db_admin_username }}"
 db_admin_password: "{{ vault_db_admin_password }}"
 
