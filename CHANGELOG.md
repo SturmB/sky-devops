@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="1.2.0"></a>
+## 1.2.0 (2021-02-04)
+
+### Changed
+
+- ♻️ Vastly cleans up the db get/put functions [[24d255a](https://github.com/SturmB/sky-devops/commit/24d255a86214b0301dcf9d7b78c54603bec7ef9d)]
+
+
 <a name="1.1.1"></a>
 ## 1.1.1 (2021-02-04)
 
