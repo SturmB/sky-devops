@@ -1,5 +1,36 @@
 # Changelog
 
+<a name="1.1.1"></a>
+## 1.1.1 (2021-02-04)
+
+### Added
+
+- ✨ Dumps local db data and imports it to the host [[f15153f](https://github.com/SturmB/sky-devops/commit/f15153ff0e5cc848c97b34aeebf49cbce170ed5b)]
+- ✨ Adds other MySQL users to db container [[95ba319](https://github.com/SturmB/sky-devops/commit/95ba319b7ac0a810b937899bbc566456f717377f)]
+- ✨ Adds dump playbook for ACS and AYS database [[cdcf8eb](https://github.com/SturmB/sky-devops/commit/cdcf8eb68ec87f3a1bdf38156661f8fb745e6277)]
+
+### Changed
+
+- ♻️ Uses correct variable names [[4524687](https://github.com/SturmB/sky-devops/commit/45246878ca4a98ad908db31e864e5a834cf04c69)]
+
+### Removed
+
+- 🔥 Remove the MySQL configuration file (no more logging general queries) [[30a4cbb](https://github.com/SturmB/sky-devops/commit/30a4cbb460ca54a9c1ba0310f5d8c630903fc374)]
+
+### Fixed
+
+- 🐛 Adds db setup to the dumping playbook [[ac010c8](https://github.com/SturmB/sky-devops/commit/ac010c8fc2c94b32e6e8509f35bcbdba357f9e90)]
+- 🐛 Fixes variable name in the docker `.env` template [[5401e25](https://github.com/SturmB/sky-devops/commit/5401e25623a6a696d19f5e231c0a30893c29a988)]
+
+### Miscellaneous
+
+- ⚗️ Disable pre-populating the schedule db, too [[81573e0](https://github.com/SturmB/sky-devops/commit/81573e0be9c5d701e058061078f56e6556d93914)]
+- ⚗️ Test 'dbinit' when dbms isn't pre-populated [[92995d4](https://github.com/SturmB/sky-devops/commit/92995d4473dc12e3463e3358300b510d89fcc529)]
+-  🩹 Minor adjustments to clean up code [[a3b27f2](https://github.com/SturmB/sky-devops/commit/a3b27f27b4956ba364d826316be270e33203a826)]
+- 🚧 Fixes connecting to container db and adding `skyadmin` user [[6eed672](https://github.com/SturmB/sky-devops/commit/6eed672f8299f80be57f1f707677a8df411edd23)]
+- 🚧 Attempting to automate initializing the ACS db in a container [[8595758](https://github.com/SturmB/sky-devops/commit/85957587c05535a4638d8d6a1d6522aa94237a50)]
+
+
 <a name="1.1.0"></a>
 ## 1.1.0 (2021-01-27)
 
