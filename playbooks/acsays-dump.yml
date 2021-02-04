@@ -29,6 +29,52 @@
   gather_facts: yes
 
   tasks:
+
+    - name: Get the generated root password
+      shell: "docker logs acsays-db 2>&1 | grep GENERATED"
+      register: docker_log
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Get list of MySQL users
+      shell: >
+        docker exec acsays-db mysql -u root --password={{ docker_log.stdout.split(':') | last | trim }} -e
+        "SELECT user FROM mysql.user;"
+      when: docker_log is succeeded and docker_log.stdout | length > 0
+      register: mysql_users
+      changed_when: false
+      tags:
+        - acs
+        - ays
+
+    - name: Ensure MySQL user `skyadmin` exists
+      shell: >
+        docker exec acsays-db mysql -u root --password={{ docker_log.stdout.split(':') | last | trim }} -e
+        "CREATE USER '{{ db_admin_username }}'@'%' IDENTIFIED BY '{{ db_admin_password }}';
+        GRANT ALL PRIVILEGES ON *.* TO '{{ db_admin_username }}'@'%' WITH GRANT OPTION;"
+      when:
+        - docker_log is succeeded and docker_log.stdout | length > 0
+        - mysql_users is not search(db_admin_username)
+      tags:
+        - acs
+        - ays
+
+    - name: Ensure other MySQL users exist
+      community.mysql.mysql_user:
+        name: "{{ item.username }}"
+        password: "{{ item.password }}"
+        host: "%"
+        state: present
+        priv: "{{ item.privs }}"
+        login_host: "{{ ansible_host }}"
+        login_port: 3326
+        login_user: "{{ db_admin_username }}"
+        login_password: "{{ db_admin_password }}"
+      loop: "{{ db_users }}"
+      tags:
+        - acs
+        - ays
+
     - name: Import dump
       community.mysql.mysql_db:
         name: "{{ db_acsays_database }}"
