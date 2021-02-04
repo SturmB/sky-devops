@@ -1,0 +1,29 @@
+---
+- name: Get copy of staged ACS/AYS database
+  hosts: skyubuntu
+  gather_facts: yes
+
+  tasks:
+    - name: Dump ACS/AYS database
+      community.mysql.mysql_db:
+        name: "{{ db_acsays_database }}"
+        state: dump
+        dump_extra_args: --column-statistics=0 --opt
+        target: /tmp/{{ db_acsays_database }}.sql
+        login_host: "{{ ansible_host }}"
+        login_port: 3326
+        login_user: "{{ db_admin_username }}"
+        login_password: "{{ db_admin_password }}"
+      delegate_to: localhost
+      tags:
+        - docker
+        - acs
+        - ays
+
+- name: Import staged ACS/AYS database dump to test server
+  hosts: localhost
+  gather_facts: yes
+
+  tasks:
+    - name: Preset tasks for this.
+      import_tasks: ../tasks/db-init.yml
