@@ -93,7 +93,6 @@ services:
       # MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - schedule-dbdata:/var/lib/mysql
-      - "{{ config_dir }}/mysql/my.cnf:/etc/mysql/my.cnf"
     networks:
       - web
 
@@ -112,7 +111,6 @@ services:
       # MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - acsays-dbdata:/var/lib/mysql
-      - "{{ config_dir }}/mysql/my.cnf:/etc/mysql/my.cnf"
     networks:
       - web
 
