@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="1.4.1"></a>
+## 1.4.1 (2021-02-05)
+
+### Fixed
+
+- 🐛 Adds redis support + a custom volume for it [[5bb4f84](https://github.com/SturmB/sky-devops/commit/5bb4f84e186030244ecf021f6ebb2a2154ff4582)]
+
+
 <a name="1.4.0"></a>
 ## 1.4.0 (2021-02-05)
 
