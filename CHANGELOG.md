@@ -1,5 +1,17 @@
 # Changelog
 
+<a name="1.3.0"></a>
+## 1.3.0 (2021-02-05)
+
+### Changed
+
+- ♻️ Makes database handling much more portable and modular [[43b9bf5](https://github.com/SturmB/sky-devops/commit/43b9bf5acc3a0cc34fc10fc1e2e415c681488322)]
+
+### Removed
+
+- 🔥 Removes seemingly unnecessary docker-compose file [[e300f29](https://github.com/SturmB/sky-devops/commit/e300f294a51625c3c1d445520992e556844378ed)]
+
+
 <a name="1.2.0"></a>
 ## 1.2.0 (2021-02-04)
 

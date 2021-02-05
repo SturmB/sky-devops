@@ -1,6 +1,6 @@
 {
   "name": "sky-devops",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "DevOps for Sky Unlimited, Inc.",
   "main": "index.js",
   "scripts": {
