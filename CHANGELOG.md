@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="1.4.0"></a>
+## 1.4.0 (2021-02-05)
+
+### Added
+
+- ✨ Transfers routines as well! [[fbaa262](https://github.com/SturmB/sky-devops/commit/fbaa262fab9ed83d963c6674c1683381673bd51c)]
+
+
 <a name="1.3.0"></a>
 ## 1.3.0 (2021-02-05)
 
