@@ -8,7 +8,7 @@
       community.mysql.mysql_db:
         name: "{{ db[app].db_name }}"
         state: dump
-        dump_extra_args: --column-statistics=0 --opt
+        dump_extra_args: --routines --column-statistics=0 --opt
         target: /tmp/{{ db[app].db_name }}.sql
         login_host: "{{ ansible_host }}"
         login_port: "{{ db[app].port }}"
