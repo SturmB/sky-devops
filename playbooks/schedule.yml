@@ -18,9 +18,19 @@
     - name: Bring common containers online
       import_tasks: ../tasks/common-docker.yml
 
-    - name: Ensure `schedule-dbdata` volume exists
+    - name: Ensure the db volume exists
       community.general.docker_volume:
         volume_name: schedule-dbdata
+        state: present
+        driver: local
+        recreate: never
+      tags:
+        - docker
+        - schedule
+
+    - name: Ensure the redis volume exists
+      community.general.docker_volume:
+        volume_name: redis-data
         state: present
         driver: local
         recreate: never
