@@ -1,7 +1,7 @@
 ---
-- name: Ensure `acsays-dbdata` volume exists
+- name: Ensure db volume exists
   community.general.docker_volume:
-    volume_name: acsays-dbdata
+    volume_name: "{{ db[app].volume }}"
     state: present
     driver: local
     recreate: never
@@ -10,21 +10,21 @@
     - acs
     - ays
 
-- name: Ensure the American Cabin Supply MySQL container is running
+- name: Ensure the MySQL container is running
   community.general.docker_compose:
     project_src: "{{ work_dir }}"
     state: present
     pull: yes
     recreate: "{{ recreate_containers }}"
     services:
-      - acsays-db
+      - "{{ db[app].service }}"
   tags:
     - docker
     - acs
     - ays
 
 - name: Get the generated root password
-  shell: "docker logs acsays-db 2>&1 | grep GENERATED"
+  shell: "docker logs {{ db[app].service }} 2>&1 | grep GENERATED"
   register: docker_log
   changed_when: false
   ignore_errors: yes
@@ -35,7 +35,7 @@
 
 - name: Get list of MySQL users
   shell: >
-    docker exec acsays-db mysql -u root --password={{ docker_log.stdout.split(':') | last | trim }} -e
+    docker exec {{ db[app].service }} mysql -u root --password={{ docker_log.stdout.split(':') | last | trim }} -e
     "SELECT user FROM mysql.user;"
   when: docker_log is succeeded and docker_log.stdout | length > 0
   register: mysql_users
@@ -45,9 +45,9 @@
     - acs
     - ays
 
-- name: Ensure MySQL user `skyadmin` exists
+- name: Ensure MySQL admin user exists
   shell: >
-    docker exec acsays-db mysql -u root --password={{ docker_log.stdout.split(':') | last | trim }} -e
+    docker exec {{ db[app].service }} mysql -u root --password={{ docker_log.stdout.split(':') | last | trim }} -e
     "CREATE USER '{{ db_admin_username }}'@'%' IDENTIFIED BY '{{ db_admin_password }}';
     GRANT ALL PRIVILEGES ON *.* TO '{{ db_admin_username }}'@'%' WITH GRANT OPTION;"
   when:
@@ -66,10 +66,12 @@
     state: present
     priv: "{{ item.privs }}"
     login_host: "{{ ansible_host }}"
-    login_port: 3326
+    login_port: "{{ db[app].port }}"
     login_user: "{{ db_admin_username }}"
     login_password: "{{ db_admin_password }}"
   loop: "{{ db_users }}"
+  loop_control:
+    label: "{{ item.username }}"
   tags:
     - docker
     - acs
@@ -77,11 +79,11 @@
 
 - name: Import dump
   community.mysql.mysql_db:
-    name: "{{ db_acsays_database }}"
+    name: "{{ db[app].db_name }}"
     state: import
-    target: /tmp/{{ db_acsays_database }}.sql
+    target: /tmp/{{ db[app].db_name }}.sql
     login_host: "{{ ansible_host if ansible_host != 'localhost' else '127.0.0.1' }}"
-    login_port: 3326
+    login_port: "{{ db[app].port }}"
     login_user: "{{ db_admin_username }}"
     login_password: "{{ db_admin_password }}"
   tags:

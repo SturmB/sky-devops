@@ -1,0 +1,35 @@
+---
+- name: Initialize a database
+  hosts: staging,local
+  gather_facts: yes
+
+  vars:
+    apps:
+      - acs
+      - ays
+      - schedule
+    actions:
+      - get
+      - put
+
+  tasks:
+    # - block:
+    #     - name: End the host if app is not specified
+    #       debug:
+    #         msg: "You must specify either 'acs', 'ays', or 'schedule' as an '--extra-vars app=' variable."
+
+    #     - meta: end_host
+    #   when: (app is undefined) or (app not in apps)
+
+    - name: Check if app is specified
+      fail:
+        msg: "You must specify either 'acs', 'ays', or 'schedule' as an '--extra-vars app=' variable."
+      when: (app is undefined) or (app not in apps)
+
+    - name: Check if action is specified
+      fail:
+        msg: "You must specify whether to 'get' or 'put' as an '--extra-vars act=' variable."
+      when: (act is undefined) or (act not in actions)
+
+- name: Variables check, continue calling the correct playbook
+  import_playbook: playbooks/db-{{ act }}.yml

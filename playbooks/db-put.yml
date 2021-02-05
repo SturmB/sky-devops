@@ -1,17 +1,17 @@
 ---
-- name: ACS & AYS DB Initializer
+- name: DB Initializer
   hosts: skyubuntu
   gather_facts: yes
 
   tasks:
-    - name: Dump ACS/AYS database
+    - name: Dump database to file
       community.mysql.mysql_db:
-        name: "{{ db_acsays_database }}"
+        name: "{{ db[app].db_name }}"
         state: dump
         dump_extra_args: --column-statistics=0 --opt
-        target: /tmp/{{ db_acsays_database }}.sql
+        target: /tmp/{{ db[app].db_name }}.sql
         login_host: 127.0.0.1
-        login_port: 3326
+        login_port: "{{ db[app].port }}"
         login_user: "{{ db_admin_username }}"
         login_password: "{{ db_admin_password }}"
       delegate_to: localhost
@@ -22,12 +22,12 @@
 
     - name: Copy dumped db file to the host
       copy:
-        src: /tmp/{{ db_acsays_database }}.sql
+        src: /tmp/{{ db[app].db_name }}.sql
         dest: /tmp
       tags:
         - docker
         - acs
         - ays
 
-    - name: Preset tasks for this.
-      import_tasks: ../tasks/db-init.yml
+    - name: Provision & populate db
+      import_tasks: ../tasks/db-provision.yml

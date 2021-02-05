@@ -54,6 +54,24 @@ upgrade_acs: no
 upgrade_ays: no
 upgrade_schedule: no
 
+# Database vars
+db:
+  acs:
+    db_name: "{{ db_acsays_database }}"
+    volume: acsays-dbdata
+    service: acsays-db
+    port: 3326
+  ays:
+    db_name: "{{ db_acsays_database }}"
+    volume: acsays-dbdata
+    service: acsays-db
+    port: 3326
+  schedule:
+    db_name: "{{ db_schedule_database }}"
+    volume: schedule-dbdata
+    service: schedule-db
+    port: 3306
+
 # Miscellaneous vars
 # `recreate_containers` can be `always`, `never`, or `smart` (default).
 recreate_containers: smart
