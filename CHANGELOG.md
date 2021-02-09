@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="1.4.2"></a>
+## 1.4.2 (2021-02-09)
+
+### Fixed
+
+- 🐛 Adds Redis service to the `webservers.yml` playbook [[e82e032](https://github.com/SturmB/sky-devops/commit/e82e0321f88f0de623f956fecf146fc092e9964a)]
+
+
 <a name="1.4.1"></a>
 ## 1.4.1 (2021-02-05)
 
