@@ -39,7 +39,19 @@
         - acs
         - ays
 
-    - name: Ensure all of the sites/apps are running
+    - name: Ensure the redis volume exists
+      community.general.docker_volume:
+        volume_name: redis-data
+        state: present
+        driver: local
+        recreate: never
+      tags:
+        - docker
+        - schedule
+        - acs
+        - ays
+
+    - name: Ensure all of the services are running
       community.general.docker_compose:
         project_src: "{{ work_dir }}"
         state: present
@@ -53,6 +65,7 @@
           - ays
           - acsays-db
           - aa
+          - redis
       tags:
         - docker
         - schedule
