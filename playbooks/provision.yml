@@ -4,6 +4,8 @@
   tags:
     - droplet
     - laravel
+    - acs
+    - ays
   connection: local
   gather_facts: false
 

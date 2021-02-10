@@ -92,15 +92,18 @@
   roles:
     - geerlingguy.composer
     - geerlingguy.nodejs
+    - geerlingguy.redis
+    - geerlingguy.php-pecl
 
   tasks:
-    - name: Ensure `php-mbstring` is installed
+    - name: Ensure apt packages are installed
       apt:
         name:
           - php-mbstring
           - zip
           - unzip
           - php-zip
+          - php-xml
         state: present
         update_cache: yes
       notify: Restart Apache
