@@ -129,6 +129,18 @@
         replace: '\1 "{{ doc_root }}"'
       notify: Restart Apache
 
+    - name: Find `php.ini`
+      shell: find /etc/php/*/apache2 -name 'php.ini' 2>/dev/null
+      register: phpini
+      changed_when: false
+
+    - name: Ensure Redis extension is enabled
+      lineinfile:
+        path: "{{ phpini.stdout }}"
+        line: |
+          extension=redis
+        state: present
+
   handlers:
     - name: Restart Apache
       service:
