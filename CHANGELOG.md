@@ -1,5 +1,24 @@
 # Changelog
 
+<a name="1.5.0"></a>
+## 1.5.0 (2021-02-15)
+
+### Added
+
+- ✨ Adds redis and php-redis to Laravel servers [[eec3bb6](https://github.com/SturmB/sky-devops/commit/eec3bb6fc73ece11d244fd57521ada9bf3f110af)]
+
+### Changed
+
+- 🗃️ Uses the latest version of MySQL for ACS/AYS db [[c898e62](https://github.com/SturmB/sky-devops/commit/c898e6279163c21f2ea07dec722e63298f7e7ffd)]
+- 🗃️ Sets Sky Schedule to use the latest MySQL version [[95498b1](https://github.com/SturmB/sky-devops/commit/95498b1dc1e71b9c10458a8f96993ee4e510ae2f)]
+
+### Fixed
+
+- 🐛 Restarts the balancer for all service-based playbooks [[3dd0bc6](https://github.com/SturmB/sky-devops/commit/3dd0bc601b5542927c7b8ee10f433fdbdad63953)]
+- 🐛 Makes sure to restart the balancer if any of the services were changed [[2a91f84](https://github.com/SturmB/sky-devops/commit/2a91f8424523680e74ac7721dd8606d8b28c878f)]
+- 🐛 Ensures php-redis is enabled in `php.ini` [[dc0b625](https://github.com/SturmB/sky-devops/commit/dc0b62508e3cf87fdf1f6732919028b6b2728cc3)]
+
+
 <a name="1.4.2"></a>
 ## 1.4.2 (2021-02-09)
 
