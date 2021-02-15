@@ -51,6 +51,7 @@
           - acs
           - acsays-db
           - redis
+      notify: Restart balancer
       tags:
         - docker
         - acs
@@ -61,3 +62,10 @@
       tags:
         - docker
         - acs
+
+  handlers:
+    - name: Restart balancer
+      community.general.docker_container:
+        name: balancer
+        state: started
+        restart: yes
