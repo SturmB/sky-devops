@@ -51,6 +51,7 @@
           - ays
           - acsays-db
           - redis
+      notify: Restart balancer
       tags:
         - docker
         - ays
@@ -61,3 +62,10 @@
       tags:
         - docker
         - ays
+
+  handlers:
+    - name: Restart balancer
+      community.general.docker_container:
+        name: balancer
+        state: started
+        restart: yes

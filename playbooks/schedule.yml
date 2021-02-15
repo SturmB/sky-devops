@@ -49,6 +49,7 @@
           - schedule
           - schedule-db
           - redis
+      notify: Restart balancer
       tags:
         - docker
         - schedule
@@ -59,3 +60,10 @@
       tags:
         - docker
         - schedule
+
+  handlers:
+    - name: Restart balancer
+      community.general.docker_container:
+        name: balancer
+        state: started
+        restart: yes

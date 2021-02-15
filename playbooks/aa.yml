@@ -27,6 +27,7 @@
         services:
           - balancer
           - aa
+      notify: Restart balancer
       tags:
         - docker
         - aa
@@ -37,3 +38,10 @@
       tags:
         - docker
         - aa
+
+  handlers:
+    - name: Restart balancer
+      community.general.docker_container:
+        name: balancer
+        state: started
+        restart: yes
