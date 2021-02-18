@@ -67,3 +67,4 @@
         name: balancer
         state: started
         restart: yes
+        container_default_behavior: no_defaults
