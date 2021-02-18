@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="1.5.2"></a>
+## 1.5.2 (2021-02-18)
+
+### Miscellaneous
+
+- 🩹 Sets the environment template to use redis for caching [[938847b](https://github.com/SturmB/sky-devops/commit/938847b48a31e6f6ca5ff85469745552f5f9935b)]
+
+
 <a name="1.5.1"></a>
 ## 1.5.1 (2021-02-18)
 
