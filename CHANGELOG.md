@@ -1,5 +1,17 @@
 # Changelog
 
+<a name="1.5.1"></a>
+## 1.5.1 (2021-02-18)
+
+### Changed
+
+- 👽 Explicitly defines Docker container default behavior [[41451a4](https://github.com/SturmB/sky-devops/commit/41451a43b9e86fa387c73a626c0daaf6a1f25f73)]
+
+### Miscellaneous
+
+- ⚗️ Looks up the correct home directory [[3b476f4](https://github.com/SturmB/sky-devops/commit/3b476f449f5a774f4ce975646779743a9fb6fdb4)]
+
+
 <a name="1.5.0"></a>
 ## 1.5.0 (2021-02-15)
 
