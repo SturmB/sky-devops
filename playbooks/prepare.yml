@@ -104,9 +104,16 @@
           - unzip
           - php-zip
           - php-xml
+          - php-redis
         state: present
         update_cache: yes
       notify: Restart Apache
+
+    - name: Ensure Node global packages are installed
+      community.general.npm:
+        name: cross-env
+        state: present
+        global: yes
 
     - name: Get info on `.env` file
       stat:
@@ -138,7 +145,7 @@
       lineinfile:
         path: "{{ phpini.stdout }}"
         line: |
-          extension=redis
+          extension=redis.so
         state: present
 
   handlers:
