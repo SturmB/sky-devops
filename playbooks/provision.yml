@@ -6,6 +6,7 @@
     - laravel
     - acs
     - ays
+    - redmine
   connection: local
   gather_facts: false
 
