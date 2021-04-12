@@ -26,6 +26,14 @@
         mode: g+w
         recurse: yes
 
+    - name: Ensure the deploying user owns the web document root directory
+      file:
+        path: "{{ web_root }}"
+        state: directory
+        owner: "deployer"
+        group: "www-data"
+        recurse: yes
+
     - name: Ensure `default.htm` is the first index file Apache looks for
       lineinfile:
         path: /etc/apache2/sites-available/000-default.conf

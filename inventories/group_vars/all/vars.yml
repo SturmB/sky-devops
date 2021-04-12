@@ -108,12 +108,12 @@ users:
       - www-data
     append: yes
     shell: /bin/bash
-  - username: "travis"
-    name: Travis CI
+  - username: "deployer"
+    name: Deployer
     uid: 1001
     password: ""
     authorized_keys:
-      - "{{ lookup('file', '~/.ssh/travis_ed.pub') }}"
+      - "{{ lookup('file', '~/.ssh/deployer_ed.pub') }}"
     home_create: yes
     home_mode: "0750"
     groups:
