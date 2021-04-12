@@ -1,5 +1,17 @@
 # Changelog
 
+<a name="1.6.0"></a>
+## 1.6.0 (2021-04-12)
+
+### Added
+
+- ✨ Adds a standalone Accents droplet [[6d36920](https://github.com/SturmB/sky-devops/commit/6d36920ca7cfa10715c929df89b54e69e988bf04)]
+
+### Miscellaneous
+
+- 📝 Fixes a spelling error [[adf668f](https://github.com/SturmB/sky-devops/commit/adf668f23355ebd7c0deb5a4de70afee2a655ef2)]
+
+
 <a name="1.5.3"></a>
 ## 1.5.3 (2021-03-02)
 
