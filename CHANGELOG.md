@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="1.6.1"></a>
+## 1.6.1 (2021-04-12)
+
+### Miscellaneous
+
+- 🚀 Adds 'deployer' user and sets it as owner for the web document [[35f6366](https://github.com/SturmB/sky-devops/commit/35f6366c68191e144fe7af61df3d5411a3a7b9c1)]
+
+
 <a name="1.6.0"></a>
 ## 1.6.0 (2021-04-12)
 
