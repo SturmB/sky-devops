@@ -8,6 +8,8 @@ web_root: /var/www/html
 admin_email: itdept@skyunlimitedinc.com
 
 do_droplets:
+  - short_name: aa
+    domain: americanaccents.com
   - short_name: abl
     domain: autumnblazelodge.com
     d_index: DirectoryIndex default.htm index.php index.html
