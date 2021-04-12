@@ -39,7 +39,7 @@
       tags:
         - abl
 
-    - name: Ensire SSL certificates are in place
+    - name: Ensure SSL certificates are in place
       import_tasks: ../tasks/ssl_certificate.yml
 
     - name: Ensure apache is installed and configured
