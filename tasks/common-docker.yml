@@ -46,6 +46,11 @@
     - ays
     - aa
 
+- name: Ensure HAProxy config directory exists
+  file:
+    path: "{{ config_dir }}/haproxy"
+    state: directory
+
 - name: Ensure the HAProxy's config file is in place
   template: # noqa 404 - This is not a role
     src: ../templates/haproxy.cfg.j2
@@ -60,9 +65,14 @@
     - ays
     - aa
 
+- name: Ensure MySQL config directory exists
+  file:
+    path: "{{ config_dir }}/mysql"
+    state: directory
+
 - name: Ensure the MySQL config file is in place
-  copy:
-    src: "{{ config_dir }}/mysql/my.cnf"
+  template:
+    src: ../templates/my.cnf.j2
     dest: "{{ config_dir }}/mysql/my.cnf"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
@@ -72,6 +82,11 @@
     - schedule
     - acs
     - ays
+
+- name: Ensure `work_dir` exists
+  file:
+    path: "{{ work_dir }}"
+    state: directory
 
 - name: Ensure the Environment Variables file is in place
   template: # noqa 404 - This is not a role
