@@ -50,6 +50,9 @@ db_users:
 db_admin_username: "{{ vault_db_admin_username }}"
 db_admin_password: "{{ vault_db_admin_password }}"
 
+# SqlBak vars
+sqlbak_key: "{{ vault_sqlbak_key }}"
+
 # Upgrade vars
 upgrade_aa: no
 upgrade_acs: no

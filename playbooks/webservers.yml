@@ -66,6 +66,8 @@
           - acsays-db
           - aa
           - redis
+          - sqlbak-acsays
+          - sqlbak-schedule
       notify: Restart balancer
       tags:
         - docker

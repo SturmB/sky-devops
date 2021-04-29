@@ -108,7 +108,7 @@ services:
     networks:
       - web
 
-  # Redis Service for Sky Schedule
+  # Redis Service
   redis:
     image: redis
     container_name: redis
@@ -117,6 +117,40 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
+    networks:
+      - web
+
+  # SqlBak Service for ACS & AYS
+  sqlbak-acsays:
+    image: pranasnet/sqlbak
+    container_name: sqlbak-acsays
+    restart: unless-stopped
+    environment:
+      sqlbak_key: "{{ sqlbak_key }}"
+      sqlbak_name: acsays
+      host: acsays-db
+      db_type: mysql
+      user: "{{ db_admin_username }}"
+      password: "{{ db_admin_password }}"
+    volumes:
+      - sqlbak_data:/opt/sqlbak
+    networks:
+      - web
+
+  # SqlBak Service for Sky Schedule
+  sqlbak-schedule:
+    image: pranasnet/sqlbak
+    container_name: sqlbak-schedule
+    restart: unless-stopped
+    environment:
+      sqlbak_key: "{{ sqlbak_key }}"
+      sqlbak_name: schedule
+      host: schedule-db
+      db_type: mysql
+      user: "{{ db_admin_username }}"
+      password: "{{ db_admin_password }}"
+    volumes:
+      - sqlbak_data:/opt/sqlbak
     networks:
       - web
 
@@ -137,3 +171,6 @@ volumes:
   redis-data:
     driver: local
     name: redis-data
+  sqlbak_data:
+    driver: local
+    name: sqlbak-data

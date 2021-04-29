@@ -71,7 +71,7 @@
     state: directory
 
 - name: Ensure the MySQL config file is in place
-  template:
+  template: # noqa 404 - This is not a role
     src: ../templates/my.cnf.j2
     dest: "{{ config_dir }}/mysql/my.cnf"
     owner: "{{ ansible_user }}"
