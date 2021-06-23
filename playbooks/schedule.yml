@@ -49,8 +49,9 @@
           - schedule
           - schedule-db
           - redis
-          - sqlbak-schedule
-      notify: Restart balancer
+          - sqlbak
+      notify:
+        - Restart balancer
       tags:
         - docker
         - schedule
