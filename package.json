@@ -1,35 +1,35 @@
 {
   "name": "sky-devops",
-  "version": "1.6.1",
   "description": "DevOps for Sky Unlimited, Inc.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "version": "1.6.1",
   "author": "Chris McGee",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/skyunlimitedinc/sky-devops/issues"
   },
   "homepage": "https://github.com/skyunlimitedinc/sky-devops#readme",
+  "keywords": [
+    "aa",
+    "acs",
+    "ansible",
+    "ays",
+    "database",
+    "db",
+    "devops",
+    "digital",
+    "ocean",
+    "provision",
+    "schedule",
+    "schedule",
+    "sky",
+    "yaml"
+  ],
+  "license": "ISC",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/skyunlimitedinc/sky-devops.git"
   },
-  "keywords": [
-    "ansible",
-    "yaml",
-    "devops",
-    "acs",
-    "ays",
-    "aa",
-    "db",
-    "database",
-    "provision",
-    "digital",
-    "ocean",
-    "schedule",
-    "sky",
-    "schedule"
-  ]
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
