@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="1.7.1"></a>
+## 1.7.1 (2021-06-30)
+
+### Miscellaneous
+
+- 📝 Fixes redirect of doc badge [[464f2d7](https://github.com/skyunlimitedinc/sky-devops/commit/464f2d7201bcfb363f96b42ca790bc5981a8dd9c)]
+
+
 <a name="1.7.0"></a>
 ## 1.7.0 (2021-06-30)
 
