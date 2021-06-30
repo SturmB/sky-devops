@@ -7,11 +7,16 @@ This repo is for managing the websites and web apps for Sky Unlimited, Inc.
 ## Table of Contents
 
 - [DevOps for Sky](#devops-for-sky)
-  - [Managing Sites/Apps for the Internal Server, SkyUbuntu](#managing-sitesapps-for-the-internal-server-skyubuntu)
-    - [Manage Staging Servers](#manage-staging-servers)
-    - [Manage Sky Schedule](#manage-sky-schedule)
-  - [Managing Production Servers on **DigitalOcean**](#managing-production-servers-on-digitalocean)
-  - [Updating Packages](#updating-packages)
+  - [Table of Contents](#table-of-contents)
+  - [Description](#description)
+  - [Author](#author)
+  - [Features](#features)
+  - [How to Use](#how-to-use)
+    - [Managing Sites/Apps for the Internal Server, SkyUbuntu](#managing-sitesapps-for-the-internal-server-skyubuntu)
+      - [Manage Staging Servers](#manage-staging-servers)
+      - [Manage Sky Schedule](#manage-sky-schedule)
+    - [Managing Production Servers on **DigitalOcean**](#managing-production-servers-on-digitalocean)
+    - [Updating Packages](#updating-packages)
   - [Future Plans](#future-plans)
 
 ## Description
