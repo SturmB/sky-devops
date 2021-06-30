@@ -6,14 +6,30 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SturmB/sky-devops.git"
-  },
   "author": "Chris McGee",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SturmB/sky-devops/issues"
+    "url": "https://github.com/skyunlimitedinc/sky-devops/issues"
   },
-  "homepage": "https://github.com/SturmB/sky-devops#readme"
+  "homepage": "https://github.com/skyunlimitedinc/sky-devops#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/skyunlimitedinc/sky-devops.git"
+  },
+  "keywords": [
+    "ansible",
+    "yaml",
+    "devops",
+    "acs",
+    "ays",
+    "aa",
+    "db",
+    "database",
+    "provision",
+    "digital",
+    "ocean",
+    "schedule",
+    "sky",
+    "schedule"
+  ]
 }
