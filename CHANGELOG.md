@@ -1,5 +1,31 @@
 # Changelog
 
+<a name="1.7.0"></a>
+## 1.7.0 (2021-06-30)
+
+### Added
+
+- ✨ Adds SqlBak for the staging server's MySQL containers [[e38f90d](https://github.com/skyunlimitedinc/sky-devops/commit/e38f90d12ea69f6232ac31d58d03913f42396b03)]
+
+### Changed
+
+- 🔧 Fixes a couple of npm keywords [[c11ceef](https://github.com/skyunlimitedinc/sky-devops/commit/c11ceef42250a98044d922b785625c1ca6022161)]
+- 🔧 Re-arranges `package.json` with `fixpack` [[2ba883d](https://github.com/skyunlimitedinc/sky-devops/commit/2ba883df72b281a48b2790ca153ebefe42e567b0)]
+- 🔧 Fleshes out `package.json` [[b37a9a7](https://github.com/skyunlimitedinc/sky-devops/commit/b37a9a731b2b43531969d5f553e1ee24f256bf39)]
+- 🔧 Adds PhpStorm config files [[fff86e5](https://github.com/skyunlimitedinc/sky-devops/commit/fff86e56430e397d2328808f0af900832e84807f)]
+
+### Fixed
+
+- 🐛 Fixes Sqlbak implementation [[7875943](https://github.com/skyunlimitedinc/sky-devops/commit/7875943a11f65a9ddc11bbaa48fb0351e707dd97)]
+- 🐛 Ensures directories exist before templating to them [[2316c41](https://github.com/skyunlimitedinc/sky-devops/commit/2316c416b3fdefe4b5cb1f9c702829d29f220b12)]
+
+### Miscellaneous
+
+- 📝 Fixes the Table of Contents in the README [[57d11ef](https://github.com/skyunlimitedinc/sky-devops/commit/57d11ef0114b6f4519aceac5c9b4ee22b62da7db)]
+- 🙈 Ignores files created by the VS Code 'Local History' extension [[191283d](https://github.com/skyunlimitedinc/sky-devops/commit/191283d88eaa24c191170789717011faad153ea5)]
+- 📝 Updates the documentation [[7e56d0d](https://github.com/skyunlimitedinc/sky-devops/commit/7e56d0db2aad018deca4d2048b46b9f9d913a0ba)]
+
+
 <a name="1.6.1"></a>
 ## 1.6.1 (2021-04-12)
 
