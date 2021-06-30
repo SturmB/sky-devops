@@ -1,6 +1,6 @@
 # DevOps for Sky
 
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit) ![Ansible Lint](https://github.com/SturmB/sky-devops/workflows/Ansible%20Lint/badge.svg) [![GitHub release (latest by date)](https://img.shields.io/github/v/release/skyunlimitedinc/sky-devops)](https://github.com/skyunlimitedinc/sky-devops/releases)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit) ![Ansible Lint](https://github.com/skyunlimitedinc/sky-devops/workflows/Ansible%20Lint/badge.svg) [![GitHub release (latest by date)](https://img.shields.io/github/v/release/skyunlimitedinc/sky-devops)](https://github.com/skyunlimitedinc/sky-devops/releases)
 
 This repo is for managing the websites and web apps for Sky Unlimited, Inc.
 
