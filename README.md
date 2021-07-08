@@ -17,6 +17,7 @@ This repo is for managing the websites and web apps for Sky Unlimited, Inc.
       - [Manage Sky Schedule](#manage-sky-schedule)
     - [Managing Production Servers on **DigitalOcean**](#managing-production-servers-on-digitalocean)
     - [Updating Packages](#updating-packages)
+    - [Updating the Databases](#updating-the-databases)
   - [Future Plans](#future-plans)
 
 ## Description
@@ -96,6 +97,14 @@ To provision and launch the Sky Schedule web app on SkyUbuntu, run the command
 ansible-playbook playbooks/schedule.yml
 ```
 
+If desired, it is possible to provision and launch all three servers at once.
+
+```bash
+ansible-playbook main.yml
+```
+
+This calls `playbooks/webservers.yml`, which controls all the staging servers and Sky Schedule at once.
+
 ### Managing Production Servers on **DigitalOcean**
 
 To provision the production droplets on **DigitalOcean**, run the command
@@ -104,7 +113,7 @@ To provision the production droplets on **DigitalOcean**, run the command
 ansible-playbook do-prep.yml
 ```
 
-Please note that this will only create the production droplets, install the necessary dependencies, and get **Apache** ready for serving the sites. It _will not_ transfer the actual site files to the droplets. For that, **Travis CI** is set up to watch any pushes to the **master** branches of their respective repositories on GitHub.
+Please note that this will only create the production droplets, install the necessary dependencies, and get **Apache** ready for serving the sites. It *will not* transfer the actual site files to the droplets. For that, **Github Actions** is set up to watch any pushes to the **main** branches of their respective repositories and transfer them automatically to the droplets.
 
 ### Updating Packages
 
@@ -114,7 +123,24 @@ As a part of regular maintenance, upgrade the packages and reboot the servers as
 ansible-playbook update-packages.yml
 ```
 
-This will affect _all_ hosts, including **SkyUbuntu**, **localhost**, and the hosts on Digital Ocean.
+This will affect _all_ hosts, including **SkyUbuntu**, **localhost**, and the hosts on DigitalOcean.
+
+### Updating the Databases
+
+If you just want to update the databases on the staging server or local machine, then you'll want to execute the `db-init.yml` playbook along with two variables:
+
+| Variable | Description |
+| :------- | :---------- |
+| `app`    | Defines which application's database you want to copy. Accepted values are `schedule`, `acs`, and `ays`. |
+| `act`    | Defines whether you want to copy the database from staging to local (`get`) or from local to staging (`put`). |
+
+For example, to get a copy of the Sky Schedule database from the staging server, you would run the playbook like so:
+
+```bash
+ansible-playbook db-init.yml --extra-vars "app=schedule act=get"
+```
+
+**NOTE:** There seems to be a bug with this playbook. If it fails the first time, run it again and it should complete successfully the second time.
 
 ---
 
