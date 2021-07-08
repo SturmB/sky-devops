@@ -52,7 +52,7 @@ git clone git@github.com:skyunlimitedinc/sky-devops.git
 Go to the project directory
 
 ```bash
-cd create-downloadable-zund
+cd sky-devops
 ```
 
 ### Managing Sites/Apps for the Internal Server, SkyUbuntu
