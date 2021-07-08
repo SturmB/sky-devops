@@ -30,6 +30,10 @@ do_droplets:
   - short_name: redmine
     domain: dev.skyunlimitedinc.com
     doc_root: "{{ web_root }}/redmine"
+  - short_name: schedule
+    domain: schedule.skyunlimitedinc.com
+    doc_root: "{{ web_root }}/public"
+    framework: laravel
 
 # Database vars
 db_acsays_database: "{{ vault_db_acsays_database }}"
