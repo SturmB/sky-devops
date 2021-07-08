@@ -1,5 +1,17 @@
 # Changelog
 
+<a name="1.8.0"></a>
+## 1.8.0 (2021-07-08)
+
+### Added
+
+- ✨ Adds Sky Schedule droplet [[55de955](https://github.com/skyunlimitedinc/sky-devops/commit/55de95543db85d7bea0843acef71c74c8bf3df5f)]
+
+### Changed
+
+- 🔧 Adds data sources to PhpStorm project [[4ea1def](https://github.com/skyunlimitedinc/sky-devops/commit/4ea1defb758187fd2ea6bda45879607ca963da31)]
+
+
 <a name="1.7.1"></a>
 ## 1.7.1 (2021-06-30)
 
